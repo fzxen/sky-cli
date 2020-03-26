@@ -1,5 +1,5 @@
 {
-  "name": "sky-cli",
+  "name": "@sky/sky-cli",
   "version": "1.0.0",
   "description": "build for everything",
   "main": "index.js",
