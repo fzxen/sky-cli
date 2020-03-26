@@ -1,3 +1,3 @@
 module.exports = () => {
-  console.log('create')
+  console.log('dev')
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@sky/sky-cli",
+  "name": "@zxfan/sky-cli",
   "version": "1.0.0",
   "description": "build for everything",
   "main": "index.js",
@@ -26,6 +26,8 @@
     "ora": "^4.0.3"
   },
   "bin": {
-    "sky-cli": "./bin/cmd"
-  }
+    "sky-cli": "./bin/cmd",
+    "sli": "./bin/cmd"
+  },
+  "dependencies": {}
 }
