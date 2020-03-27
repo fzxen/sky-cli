@@ -1,10 +1,11 @@
-const { Command } = require('commander')
-const program = new Command()
+import { Command } from 'commander'
 
-const create = require('./create')
-const init = require('./init')
-const dev = require('./dev')
-const build = require('./build')
+import create from './create.js'
+import init from './init.js'
+import dev from './dev.js'
+import build from './build.js'
+
+const program = new Command()
 
 const options = [
   {

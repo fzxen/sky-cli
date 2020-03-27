@@ -4,7 +4,7 @@
   "description": "build for everything",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "gulp --gulpfile ./gulp.config.js"
   },
   "repository": {
     "type": "git",
@@ -18,12 +18,22 @@
   },
   "homepage": "https://github.com/zxffan/sky-cli#readme",
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
     "chalk": "^3.0.0",
     "commander": "^5.0.0",
+    "del": "^5.1.0",
     "download-git-repo": "^3.0.2",
+    "eslint": "^6.8.0",
+    "gulp": "^4.0.2",
+    "gulp-babel": "^8.0.0",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^6.0.0",
+    "gulp-uglify": "^3.0.2",
     "inquirer": "^7.1.0",
     "log-symbols": "^3.0.0",
-    "ora": "^4.0.3"
+    "ora": "^4.0.3",
+    "standard": "^14.3.3"
   },
   "bin": {
     "sky-cli": "./bin/cmd",
