@@ -51,13 +51,13 @@ for (const [name, command] of Object.entries(commands)) {
     .action(() => {
       switch (name) {
         case 'create':
-          create()
+          create(...process.argv.slice(3))
           break
         case 'init':
           init()
           break
         case 'dev':
-          dev()
+          dev(program.port)
           break
         case 'build':
           build()

@@ -22,7 +22,7 @@ gulp.task('eslint', async () => {
 gulp.task('compress', async () => {
   await gulp
     .src(path)
-    .pipe(babel({ presets: ['@babel/env'] }))
+    .pipe(babel())
     // .pipe(concat('cli.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./dist/'))

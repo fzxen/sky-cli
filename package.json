@@ -22,6 +22,7 @@
     "@babel/preset-env": "^7.9.0",
     "chalk": "^3.0.0",
     "commander": "^5.0.0",
+    "core-js": "^3.6.4",
     "del": "^5.1.0",
     "download-git-repo": "^3.0.2",
     "eslint": "^6.8.0",
