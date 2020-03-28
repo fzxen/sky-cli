@@ -76,6 +76,13 @@ export const updateJsonFile = (path, obj) => {
   })
 }
 
+export const getType = target =>
+  Object.prototype.toString.call(target).match(/\s(\w*)]$/)[1]
+export const isBaseType = target =>
+  ['number', 'string', 'boolean', 'undefined', 'null'].indexOf(
+    getType(target)
+  ) >= 0
+
 // * init
 export const getInitQuestions = () => {
   return [
