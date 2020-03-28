@@ -77,11 +77,13 @@ export const updateJsonFile = (path, obj) => {
 }
 
 // * init
-export const getInitCreate = () => {
+export const getInitQuestions = () => {
   return [
     {
       type: 'confirm',
-      message: 'Do you need initial a git repository',
+      message: 'Do you need initialize a git repository',
+      name: 'git',
+      default: false,
     },
   ]
 }
