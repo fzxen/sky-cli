@@ -54,7 +54,7 @@ export const getCreateQuestions = ({ name }) => {
 
 export const gitSources = {
   vue: {
-    url: 'direct:https://gitee.com/zxffan/vue-template',
+    url: 'direct:https://gitee.com/zxffan/templates.git#vue-spa',
   },
   react: {
     url: '',
