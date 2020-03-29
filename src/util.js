@@ -1,4 +1,6 @@
 import fs from 'fs'
+import WebpackMerge from 'webpack-merge'
+import WebpackChain from 'webpack-chain'
 
 export const isFoldExist = async name => {
   return new Promise((resolve, reject) => {
@@ -93,4 +95,75 @@ export const getInitQuestions = () => {
       default: false,
     },
   ]
+}
+
+// * dev & build
+export const getCliConfig = (path, options = {}) => {
+  const defaultCliConfig = {
+    /**
+     * * property: configureWebpack
+     * * type: object | function
+     * * 这会直接merge到最终webpack配置
+     */
+    configureWebpack: {}, // 这会直接merge到最终webpack配置
+
+    /**
+     * * property: chainWebpack
+     * * type: function
+     * * 是一个函数，会接收一个基于 webpack-chain 的 ChainableConfig 实例。允许对内部的 webpack 配置进行更细粒度的修改。
+     */
+    chainWebpack: config => {},
+
+    /**
+     * * property: devServer
+     * * type: object
+     * * 会传递给webpack-dev-server
+     */
+    devServer: {},
+
+    /**
+     * * property: css
+     * * type: object
+     * * 与css相关的配置
+     */
+    css: {
+      loaderOption: {
+        scss: {
+          prependData: [],
+        },
+        less: {
+          prependData: [],
+        },
+      },
+    },
+    /**
+     * * property: analysis
+     * * type: boolean
+     * * 若为tru， 打包时会启用BundleAnalyzerPlugin
+     */
+    analysis: false,
+  }
+
+  function getConfig() {
+    const genConfig = require(path)
+    const cliConfig = require(`${process.cwd()}/cli.config.js`)
+    const { configureWebpack, chainWebpack, devServer, ...args } = WebpackMerge(
+      defaultCliConfig,
+      cliConfig
+    )
+
+    const chainConfig = new WebpackChain()
+    chainWebpack(chainConfig)
+
+    return WebpackMerge(
+      genConfig(Object.assign(args, options)),
+      configureWebpack,
+      chainConfig.toConfig(),
+      {
+        devServer,
+      }
+    )
+  }
+
+  return getConfig()
 }

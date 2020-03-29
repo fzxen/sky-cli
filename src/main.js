@@ -7,66 +7,36 @@ import build from './build.js'
 
 const program = new Command()
 
-const options = [
-  {
-    flags: '-p, --port <port>',
-    description: 'port',
-    defaultValue: 3000,
-  },
-]
-const commands = {
-  create: {
-    description: 'create a new project',
-    usages: ['sky-cli create <ProjectName>'],
-    alias: 'c',
-  },
-  init: {
-    description: 'initial project',
-    usages: ['sky-cli init'],
-    alias: 'i',
-  },
-  dev: {
-    description: 'run your project in development',
-    usages: ['sky-cli dev'],
-    alias: 'd',
-  },
-  build: {
-    description: 'build your project (production)',
-    usages: ['sky-cli build'],
-    alias: 'b',
-  },
-}
-
-// set options
-for (const { flags, description, defaultValue } of options) {
-  program.option(flags, description, defaultValue)
-}
-
-// registry command
-for (const [name, command] of Object.entries(commands)) {
-  program
-    .command(name)
-    .description(command.description)
-    .alias(command.alias)
-    .action(() => {
-      switch (name) {
-        case 'create':
-          create(...process.argv.slice(3))
-          break
-        case 'init':
-          init()
-          break
-        case 'dev':
-          dev(program.port)
-          break
-        case 'build':
-          build()
-          break
-        default:
-          break
-      }
-    })
-}
+program
+  .command('create <name>')
+  .description('create a new project')
+  .alias('c')
+  .action(name => {
+    create(name)
+  })
+program
+  .command('init')
+  .description('initialize project')
+  .alias('i')
+  .action(() => {
+    init()
+  })
+program
+  .command('dev')
+  .description('run your app in development')
+  .alias('d')
+  .option('-p, --port <port>', 'Port used by the server (default: 8080)')
+  .action(cmdObj => {
+    dev(cmdObj.port || '8080')
+  })
+program
+  .command('build')
+  .description('build your app (production)')
+  .alias('b')
+  .option('-a, --analysis', 'show buldle information')
+  .action(cmdObj => {
+    build({ analysis: cmdObj.analysis })
+  })
 
 program
   .version(require('../package.json').version, '-v --version')

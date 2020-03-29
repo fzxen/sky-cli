@@ -3,6 +3,7 @@ const eslintFriendlyFormatter = require('eslint-formatter-friendly')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 const mode = process.env.NODE_ENV
+const isMultiCpu = require('os').cpus().length > 1
 /**
  ** loader
  */
@@ -19,12 +20,12 @@ exports.JsLoader = () => {
   const options = {
     test: /\.(js)$/,
     use: [
-      require.resolve('thread-loader'),
+      isMultiCpu ? require.resolve('thread-loader') : '',
       {
         loader: require.resolve('babel-loader'),
         options: { cacheDirectory: true, sourceType: 'unambiguous' },
       },
-    ], // 开启babel-loader的缓存
+    ].filter(item => item), // 开启babel-loader的缓存
     include: [/src/],
   }
 
@@ -39,7 +40,10 @@ exports.JsLoader = () => {
 exports.VueLoader = () => {
   const options = {
     test: /\.vue$/,
-    use: [require.resolve('thread-loader'), require.resolve('vue-loader')],
+    use: [
+      isMultiCpu ? require.resolve('thread-loader') : '',
+      require.resolve('vue-loader'),
+    ].filter(item => item),
     include: [/src/],
   }
 
@@ -51,76 +55,102 @@ exports.VueLoader = () => {
   return options
 }
 
-exports.CssLoader = () => ({
-  test: /\.css$/,
-  oneOf: [
-    // 这里匹配 `<style module>`
-    {
-      resourceQuery: /module/,
-      use: [
-        mode === 'production'
-          ? MiniCssExtractPlugin.loader
-          : require.resolve('vue-style-loader'),
-        {
-          loader: require.resolve('css-loader'),
-          options: {
-            modules: true,
-            // localIdentName: '[name]_[local]_[hash:base64:5]'
-          },
-        },
-        require.resolve('postcss-loader'),
-      ],
-    },
-    // 这里匹配普通的 `<style>` 或 `<style scoped>`
-    {
-      use: [
-        mode === 'production'
-          ? MiniCssExtractPlugin.loader
-          : require.resolve('vue-style-loader'),
-        require.resolve('css-loader'),
-        require.resolve('postcss-loader'),
-      ],
-    },
-  ],
-})
-
-exports.LessLoader = () => ({
-  test: /\.less$/,
-  use: [
-    mode === 'production'
-      ? MiniCssExtractPlugin.loader
-      : require.resolve('vue-style-loader'),
-    require.resolve('css-loader'),
-    require.resolve('postcss-loader'),
-    {
-      loader: require.resolve('less-loader'),
-      options: {
-        javascriptEnabled: true,
+exports.CssLoader = module => {
+  const result = {
+    test: /\.css$/,
+    oneOf: [
+      // 这里匹配普通的 `<style>` 或 `<style scoped>`
+      {
+        use: [
+          mode === 'production'
+            ? MiniCssExtractPlugin.loader
+            : require.resolve('vue-style-loader'),
+          require.resolve('css-loader'),
+          require.resolve('postcss-loader'),
+        ],
       },
-    },
-  ],
-})
+    ],
+  }
 
-exports.SassLoader = () => ({
-  test: /\.s(a|c)ss$/,
-  use: [
-    mode === 'production'
-      ? MiniCssExtractPlugin.loader
-      : require.resolve('vue-style-loader'),
-    require.resolve('css-loader'),
-    require.resolve('postcss-loader'),
-    require.resolve('sass-loader'),
-    // {
-    //   loader: 'sass-resources-loader',
-    //   options: {
-    //     resources: [
-    //       absolute(`../src/assets/style/color.scss`),
-    //       absolute(`../src/assets/style/mixins.scss`),
-    //     ],
-    //   },
-    // },
-  ],
-})
+  //  开启css-module
+  if (module) {
+    result.oneOf.unshift(
+      // 这里匹配 `<style module>`
+      {
+        resourceQuery: /module/,
+        use: [
+          mode === 'production'
+            ? MiniCssExtractPlugin.loader
+            : require.resolve('vue-style-loader'),
+          {
+            loader: require.resolve('css-loader'),
+            options: {
+              modules: true,
+              // localIdentName: '[name]_[local]_[hash:base64:5]'
+            },
+          },
+          require.resolve('postcss-loader'),
+        ],
+      }
+    )
+  }
+  return result
+}
+
+exports.LessLoader = ({ prependData }) => {
+  const result = {
+    test: /\.less$/,
+    use: [
+      mode === 'production'
+        ? MiniCssExtractPlugin.loader
+        : require.resolve('vue-style-loader'),
+      require.resolve('css-loader'),
+      require.resolve('postcss-loader'),
+      {
+        loader: require.resolve('less-loader'),
+        options: {
+          javascriptEnabled: true,
+        },
+      },
+    ],
+  }
+
+  if (prependData && prependData.length > 0) {
+    result.use.push({
+      loader: require.resolve('sass-resources-loader'),
+      options: {
+        resources: prependData,
+      },
+    })
+  }
+
+  return result
+}
+
+exports.SassLoader = ({ prependData }) => {
+  const result = {
+    test: /\.s(a|c)ss$/,
+    use: [
+      mode === 'production'
+        ? MiniCssExtractPlugin.loader
+        : require.resolve('vue-style-loader'),
+      require.resolve('css-loader'),
+      require.resolve('postcss-loader'),
+      require.resolve('sass-loader'),
+    ],
+  }
+
+  if (prependData && prependData.length > 0) {
+    result.use.push({
+      loader: require.resolve('sass-resources-loader'),
+      options: {
+        resources: prependData,
+      },
+    })
+  }
+
+  return result
+}
 
 exports.StaticsLoader = () => {
   const name =

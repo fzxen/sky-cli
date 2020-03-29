@@ -19,16 +19,15 @@ exports.VueLoaderPlugin = () => {
 }
 
 exports.HtmlWebpackPlugin = (
-  // externalConfig,
+  externalConfig,
   template = './public/index.html',
   favicon = './public/favicon.ico'
 ) => {
   let options = {
     template: absolute(template),
     favicon: absolute(favicon),
-    // cdnConfig: externalConfig, // cdn配置
-    // onlyCss: false, // 只加载css
-    inject: true,
+    cdnConfig: externalConfig, // cdn配置
+    inject: !externalConfig,
   }
 
   const prodOptions = {
@@ -67,7 +66,7 @@ exports.MiniCssExtractPlugin = () => {
 
   if (mode === 'production') {
     plugin = new MiniCssExtractPlugin({
-      filename: `assets/style/[name][contenthash:8].css`,
+      filename: 'assets/style/[name][contenthash:8].css',
     })
   }
 

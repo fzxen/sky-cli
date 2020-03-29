@@ -13,23 +13,31 @@ import {
 } from './util.js'
 
 function download(options) {
-  const { name, frame } = options
-  const loading = ora()
-  loading.start('downloading...')
+  return new Promise((resolve, reject) => {
+    const { name, frame } = options
+    const loading = ora()
+    loading.start('downloading...')
 
-  const source = gitSources[frame]
-
-  downloadGit(source.url, name, { clone: true }, err => {
-    if (err) loading.fail('download failed')
-    else {
-      loading.succeed('download successfully')
-      updatePackage(options).then(() =>
-        console.log(
-          symbol.success,
-          chalk.green('package has updated completely')
-        )
-      )
+    const source = gitSources[frame]
+    if (!source.url) {
+      loading.fail(`${name} is not provided for now`)
+      reject(new Error(`${name} is not provided for now`))
     }
+    downloadGit(source.url, name, { clone: true }, err => {
+      if (err) {
+        loading.fail('download failed, please check your network')
+        reject(new Error('download failed'))
+      } else {
+        loading.succeed('download successfully')
+        updatePackage(options).then(() => {
+          console.log(
+            symbol.success,
+            chalk.green('package has updated completely')
+          )
+          resolve()
+        })
+      }
+    })
   })
 }
 
@@ -51,6 +59,18 @@ export default async name => {
         .prompt(getCreateQuestions({ name }))
         .then(answer => {
           download({ name, ...answer })
+            .then(() => {
+              console.log(
+                symbol.success,
+                [
+                  chalk.green('app has been created successfully'),
+                  `\tcd ${name}`,
+                  '\t sli init',
+                  '\t sli dev',
+                ].join('\n')
+              )
+            })
+            .catch(() => {})
         })
         .catch(err => {
           console.log(err)
