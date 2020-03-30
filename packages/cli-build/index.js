@@ -1,16 +1,16 @@
 import ora from 'ora'
 import Webpack from 'webpack'
 
-import { getCliConfig } from './util'
+import { getCliConfig } from '../util'
 
-export default ({ analysis }) => {
+module.exports = ({ analysis }) => {
   const loading = ora()
   loading.start('app is building...')
 
   // set enviroment
   process.env.NODE_ENV = 'production'
 
-  const config = getCliConfig('../src/frames/vue/webpack.prod', { analysis })
+  const config = getCliConfig('../frames/vue/webpack.prod', { analysis })
 
   const compiler = Webpack(config)
 

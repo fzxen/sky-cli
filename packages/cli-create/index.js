@@ -10,7 +10,7 @@ import {
   getCreateQuestions,
   gitSources,
   updateJsonFile,
-} from './util.js'
+} from '../util.js'
 
 function download(options) {
   return new Promise((resolve, reject) => {
@@ -46,7 +46,7 @@ function updatePackage(options) {
   return updateJsonFile(`${name}/package.json`, options)
 }
 
-export default async name => {
+module.exports = name => {
   // validate projectName
   if (isNone(name)) {
     console.log(symbol.error, chalk.red('please input your projectName'))

@@ -5,7 +5,7 @@ const uglify = require('gulp-uglify')
 // const concat = require('gulp-concat')
 const del = require('del')
 
-const path = './src/*.js'
+const path = './packages/**/*.js'
 
 gulp.task('clean', async () => {
   await del(['./dist'])
@@ -29,7 +29,7 @@ gulp.task('compress', async () => {
 })
 
 gulp.task('watch', async () => {
-  await gulp.watch(path, gulp.series('clean', 'eslint', 'compress'))
+  await gulp.watch(path, gulp.series('eslint', 'compress'))
 })
 
 gulp.task('default', gulp.series('clean', 'eslint', 'compress', 'watch'))

@@ -4,7 +4,7 @@ import chalk from 'chalk'
 import symbol from 'log-symbols'
 import ora from 'ora'
 
-import { getInitQuestions, isNone } from './util'
+import { getInitQuestions, isNone } from '../util'
 
 function initRepository() {
   const loading = ora()
@@ -32,7 +32,7 @@ function intall() {
   })
 }
 
-export default () => {
+module.exports = () => {
   inquirer.prompt(getInitQuestions()).then(answers => {
     const { git } = answers
     git && initRepository()

@@ -110,7 +110,14 @@ status: Pre-Alpha
 
 ## TODO
 
+### 1.x
+
 - [ ] 粒度更细的文件配置
+- [ ] 项目结构优化
+- [ ] TS 重构
+- [ ] 通过 WebpackPlugin 支持 CDN
+
+### 2.x
+
 - [ ] react 支持
 - [ ] electron 支持
-- [ ] 项目结构优化
