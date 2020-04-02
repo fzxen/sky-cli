@@ -71,7 +71,6 @@ function download(options: QueryOptions): Promise<void> {
       loading.fail(`${name} is not provided for now`);
       reject(new Error(`${name} is not provided for now`));
     }
-    console.log(source.url, name);
 
     downloadGit(source.url, name, { clone: true }, err => {
       if (err) {
@@ -120,7 +119,7 @@ export default (name: string): void => {
             });
         })
         .catch((err: Error) => {
-          console.log(12123123, err);
+          console.log(symbol.error, chalk.red(err.message));
         });
     })
     .catch(err => {

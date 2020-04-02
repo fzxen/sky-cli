@@ -34,7 +34,12 @@ export const updateJsonFile = (path: string, obj: object): Promise<void> => {
     if (fs.existsSync(path)) {
       const data = fs.readFileSync(path).toString();
       const json = JSON.parse(data);
+
+      const cliData = require('../package.json'); // eslint-disable-line
+
       Object.assign(json, obj);
+      json.devDependencies[cliData.name] = cliData.version;
+
       fs.writeFileSync(path, JSON.stringify(json, null, '\t'));
       resolve();
     }
