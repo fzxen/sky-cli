@@ -6,7 +6,7 @@ import ora from 'ora'
 
 import { getInitQuestions, isNone } from '../util'
 
-function initRepository() {
+function initRepository(): void {
   const loading = ora()
   loading.start('git repository initializing...')
   exec('git init', err => {
@@ -18,7 +18,7 @@ function initRepository() {
   })
 }
 
-function intall() {
+function intall(): void {
   const loading = ora()
   loading.start('npm installing...')
   exec('npm install', (err, stdout, stderr) => {
@@ -27,17 +27,18 @@ function intall() {
     if (isNone(err)) {
       loading.succeed('npm install successfully')
     } else {
-      loading.error('npm install failed')
+      loading.fail('npm install failed')
     }
   })
 }
 
-module.exports = () => {
+export default (): void => {
   inquirer.prompt(getInitQuestions()).then(answers => {
-    const { git } = answers
-    git && initRepository()
-
-    intall()
+    if (answers instanceof Object && 'git' in answers) {
+      const { git } = answers
+      git && initRepository()
+      intall()
+    }
   })
   // TODO 判断 npm or yarn
   // exec('npm install', (err, stdout, stderr) => {})
