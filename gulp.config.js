@@ -1,4 +1,3 @@
-/* eslint-disable */
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const babel = require('gulp-babel');
