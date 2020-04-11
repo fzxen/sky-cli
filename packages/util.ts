@@ -13,39 +13,6 @@ export const isFoldExist = (name: string): Promise<void> => {
 export const isNone = (obj: unknown): boolean =>
   obj === undefined || obj === null;
 
-type createFunParams = {
-  name: string;
-};
-
-export const gitSources = {
-  vue: {
-    url: 'direct:https://gitee.com/zxffan/templates.git#vue-spa',
-  },
-  react: {
-    url: '',
-  },
-  electron: {
-    url: '',
-  },
-};
-
-export const updateJsonFile = (path: string, obj: object): Promise<void> => {
-  return new Promise(resolve => {
-    if (fs.existsSync(path)) {
-      const data = fs.readFileSync(path).toString();
-      const json = JSON.parse(data);
-
-      const cliData = require('../package.json'); // eslint-disable-line
-
-      Object.assign(json, obj);
-      json.devDependencies[cliData.name] = cliData.version;
-
-      fs.writeFileSync(path, JSON.stringify(json, null, '\t'));
-      resolve();
-    }
-  });
-};
-
 export const getType = (target: unknown): string => {
   const regResult = Object.prototype.toString.call(target).match(/\s(\w*)]$/);
   if (regResult) return regResult?.[1];
