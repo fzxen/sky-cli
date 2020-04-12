@@ -1,4 +1,5 @@
 import { existsSync, readFileSync, writeFileSync, copyFileSync } from 'fs';
+import { resolve } from 'path';
 
 export const updatePackage = (path: string, obj: object): Promise<void> => {
   return new Promise(resolve => {
@@ -17,6 +18,5 @@ export const updatePackage = (path: string, obj: object): Promise<void> => {
   });
 };
 
-export const createCliConfig = async (path: string): Promise<void> => {
-  copyFileSync('../../../frames/vue/cli.config.js', path);
-};
+export const createCliConfig = async (path: string): Promise<void> =>
+  copyFileSync(resolve(__dirname, '../../../frames/vue/cli.config.js'), path);

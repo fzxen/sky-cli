@@ -6,7 +6,7 @@ import downloadGit from 'download-git-repo';
 
 import isFoldExist from './lib/is_fold_exist';
 import gitSources from './lib/git_sources';
-import { updatePackage } from './lib/update';
+import { updatePackage, createCliConfig } from './lib/update';
 import genQuestions from './lib/gen_questions';
 
 interface QueryOptions {
@@ -26,7 +26,7 @@ const download = (options: QueryOptions): Promise<QueryOptions> => {
     const source = gitSources[frame];
     if (!source.url) {
       loading.fail(`${frame} is not provided for now`);
-      reject(new Error(`${frame} is not provided for now`));
+      reject(new Error());
     }
 
     downloadGit(source.url, name, { clone: true }, err => {
@@ -43,15 +43,10 @@ const download = (options: QueryOptions): Promise<QueryOptions> => {
 
 const updateProject = (options: QueryOptions): Promise<void> => {
   return updatePackage(`${options.name}/package.json`, options)
-    .then(() => {
-      console.log(
-        symbol.success,
-        chalk.green('package has been updated completely')
-      );
-      Promise.resolve();
-    })
+    .then(() => createCliConfig(`${options.name}/cli.config.js`))
     .then(() => {
       // TODO
+      console.log(symbol.success, chalk.green('project has been updated'));
       Promise.resolve();
     });
 };
@@ -73,6 +68,6 @@ export default (name: string): void => {
       console.log(symbol.success, successTip(name));
     })
     .catch(err => {
-      console.log(symbol.error, chalk.red(err.message));
+      err.message && console.log(symbol.error, chalk.red(err.message));
     });
 };

@@ -1,6 +1,7 @@
-const path = require('path')
-const absolute = relative => path.resolve(process.cwd(), `${relative}`)
+const path = require('path');
+const absolute = relative => path.resolve(process.cwd(), `${relative}`);
 
+// 自动生成
 module.exports = {
   /**
    * * property: cdn
@@ -136,4 +137,4 @@ module.exports = {
    * * 若为tru， 打包时会启用BundleAnalyzerPlugin
    */
   analysis: false,
-}
+};
