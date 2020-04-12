@@ -1,60 +1,23 @@
 {
-  "name": "@zxfan/sky-cli",
-  "version": "0.2.0",
-  "description": "build for everything",
-  "main": "index.js",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "start": "gulp --gulpfile ./gulp.config.js"
+    "build:sli": "gulp --gulpfile ./gulp/sli.gulp.js",
+    "build:vue": "gulp --gulpfile ./gulp/vue.gulp.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zxffan/sky-cli.git"
+    "url": "git+https://github.com/zxffan/cli.git"
   },
   "keywords": [],
   "author": "",
-  "license": "MIT",
+  "license": "ISC",
   "bugs": {
-    "url": "https://github.com/zxffan/sky-cli/issues"
+    "url": "https://github.com/zxffan/cli/issues"
   },
-  "homepage": "https://github.com/zxffan/sky-cli#readme",
-  "dependencies": {
-    "@babel/core": "^7.9.0",
-    "@babel/preset-env": "^7.9.0",
-    "babel-loader": "^8.1.0",
-    "chalk": "^3.0.0",
-    "clean-webpack-plugin": "^3.0.0",
-    "commander": "^5.0.0",
-    "css-loader": "^3.4.2",
-    "cssnano": "^4.1.10",
-    "del": "^5.1.0",
-    "download-git-repo": "^3.0.2",
-    "eslint-formatter-friendly": "^7.0.0",
-    "eslint-loader": "^3.0.3",
-    "file-loader": "^6.0.0",
-    "html-webpack-plugin": "^4.0.2",
-    "inquirer": "^7.1.0",
-    "less": "^3.11.1",
-    "less-loader": "^5.0.0",
-    "log-symbols": "^3.0.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.1",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "ora": "^4.0.3",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^8.0.2",
-    "sass-resources-loader": "^2.0.1",
-    "terser-webpack-plugin": "^2.3.5",
-    "thread-loader": "^2.1.3",
-    "url-loader": "^4.0.0",
-    "vue-loader": "^15.9.1",
-    "vue-style-loader": "^4.1.2",
-    "vue-template-compiler": "^2.6.11",
-    "webpack": "^4.42.1",
-    "webpack-bundle-analyzer": "^3.6.1",
-    "webpack-chain": "^6.4.0",
-    "webpack-dev-server": "^3.10.3",
-    "webpack-merge": "^4.2.2"
-  },
+  "homepage": "https://github.com/zxffan/cli#readme",
   "devDependencies": {
     "@types/commander": "^2.12.2",
     "@types/inquirer": "^6.5.0",
@@ -62,16 +25,10 @@
     "@types/webpack-merge": "^4.1.5",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
+    "del": "^5.1.0",
     "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-concat": "^2.6.1",
     "gulp-eslint": "^6.0.0",
     "gulp-typescript": "^6.0.0-alpha.1",
-    "gulp-uglify": "^3.0.2",
     "typescript": "^3.8.3"
-  },
-  "bin": {
-    "sky-cli": "./bin/cmd",
-    "sli": "./bin/cmd"
   }
 }

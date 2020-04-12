@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var gitSources={vue:{url:"direct:https://gitee.com/zxffan/templates.git#vue-spa"},react:{url:""},electron:{url:""}},_default=gitSources;exports.default=_default;

@@ -1,1 +1,0 @@
-"use strict";Object.defineProperty(exports,"__esModule",{value:!0}),exports.default=void 0;var _fs=require("fs"),isNone=function(e){return null==e},isFoldExist=function(s){return new Promise(function(e,r){isNone(s)&&r(new Error("name must be provided")),(0,_fs.existsSync)(s)?r(new Error(s+" has existed")):e()})},_default=isFoldExist;exports.default=_default;
