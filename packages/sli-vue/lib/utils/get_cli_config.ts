@@ -1,8 +1,11 @@
-import Webpack from 'webpack';
+import { Configuration } from 'webpack';
 import WebpackChain from 'webpack-chain';
 import WebpackMerge from 'webpack-merge';
+import genWebpackConfig from '../utils/gen_webpack';
+import sliConfiguration from '../interface/sli_configuration';
 
-const defaultCliConfig = {
+const defaultCliConfig: sliConfiguration = {
+  cdn: false,
   /**
    * * property: configureWebpack
    * * type: object | function
@@ -30,6 +33,7 @@ const defaultCliConfig = {
    * * 与css相关的配置
    */
   css: {
+    module: false,
     loaderOption: {
       scss: {
         prependData: [],
@@ -47,25 +51,28 @@ const defaultCliConfig = {
   analysis: false,
 };
 
-export default (path: string, options: object = {}): Webpack.Configuration => {
-  function getConfig(): Webpack.Configuration {
-    const genConfig = require(path); // eslint-disable-line
+export default (
+  mode: 'development' | 'production',
+  options: object = {}
+): Configuration => {
+  function getConfig(): Configuration {
     const cliConfig = require(`${process.cwd()}/cli.config.js`); // eslint-disable-line
+
     const { configureWebpack, chainWebpack, devServer, ...args } = WebpackMerge(
-      defaultCliConfig as Webpack.Configuration,
+      defaultCliConfig as Configuration,
       cliConfig
-    ) as typeof defaultCliConfig;
+    ) as sliConfiguration;
 
     const chainConfig = new WebpackChain();
     chainWebpack(chainConfig);
 
     return WebpackMerge(
-      genConfig(Object.assign(args, options)),
+      genWebpackConfig(mode, Object.assign(args, options) as sliConfiguration),
       configureWebpack,
       chainConfig.toConfig(),
       {
         devServer,
-      } as Webpack.Configuration
+      } as Configuration
     );
   }
 

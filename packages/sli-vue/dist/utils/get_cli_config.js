@@ -16,7 +16,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var webpack_chain_1 = __importDefault(require("webpack-chain"));
 var webpack_merge_1 = __importDefault(require("webpack-merge"));
+var gen_webpack_1 = __importDefault(require("../utils/gen_webpack"));
 var defaultCliConfig = {
+    cdn: false,
     /**
      * * property: configureWebpack
      * * type: object | function
@@ -41,6 +43,7 @@ var defaultCliConfig = {
      * * 与css相关的配置
      */
     css: {
+        module: false,
         loaderOption: {
             scss: {
                 prependData: [],
@@ -57,15 +60,14 @@ var defaultCliConfig = {
      */
     analysis: false,
 };
-exports.default = (function (path, options) {
+exports.default = (function (mode, options) {
     if (options === void 0) { options = {}; }
     function getConfig() {
-        var genConfig = require(path); // eslint-disable-line
         var cliConfig = require(process.cwd() + "/cli.config.js"); // eslint-disable-line
         var _a = webpack_merge_1.default(defaultCliConfig, cliConfig), configureWebpack = _a.configureWebpack, chainWebpack = _a.chainWebpack, devServer = _a.devServer, args = __rest(_a, ["configureWebpack", "chainWebpack", "devServer"]);
         var chainConfig = new webpack_chain_1.default();
         chainWebpack(chainConfig);
-        return webpack_merge_1.default(genConfig(Object.assign(args, options)), configureWebpack, chainConfig.toConfig(), {
+        return webpack_merge_1.default(gen_webpack_1.default(mode, Object.assign(args, options)), configureWebpack, chainConfig.toConfig(), {
             devServer: devServer,
         });
     }

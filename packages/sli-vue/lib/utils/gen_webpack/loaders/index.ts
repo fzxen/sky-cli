@@ -1,23 +1,26 @@
 // const { absolute } = require('../utils')
-const eslintFriendlyFormatter = require('eslint-formatter-friendly')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
-const mode = process.env.NODE_ENV
-const isMultiCpu = require('os').cpus().length > 1
+// import eslintFriendlyFormatter from 'eslint-formatter-friendly';
+import { RuleSetRule, RuleSetUseItem } from 'webpack';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+
+const isMultiCpu = require('os').cpus().length > 1;
+
+type modeType = 'development' | 'production';
 /**
  ** loader
  */
-const eslintLoader = {
+const eslintLoader: RuleSetUseItem = {
   loader: require.resolve('eslint-loader'),
   options: {
     fix: true,
     // 这里的配置项参数将会被传递到 eslint 的 CLIEngine
-    formatter: eslintFriendlyFormatter, // 指定错误报告的格式规范
+    // formatter: eslintFriendlyFormatter, // 指定错误报告的格式规范
   },
-}
+};
 
-exports.JsLoader = () => {
-  const options = {
+export const genJsLoader = (mode: modeType): RuleSetRule => {
+  const options: RuleSetRule & { use: Array<RuleSetUseItem> } = {
     test: /\.(js)$/,
     use: [
       isMultiCpu ? require.resolve('thread-loader') : '',
@@ -27,36 +30,36 @@ exports.JsLoader = () => {
       },
     ].filter(item => item), // 开启babel-loader的缓存
     include: [/src/],
-  }
+  };
 
-  const devOptions = [eslintLoader]
+  const devOptions = [eslintLoader];
 
   // 开发环境启用eslint-loader
-  if (mode === 'development') options.use.push(...devOptions)
+  if (mode === 'development') options.use.push(...devOptions);
 
-  return options
-}
+  return options;
+};
 
-exports.VueLoader = () => {
-  const options = {
+export const genVueLoader = (mode: modeType): RuleSetRule => {
+  const options: RuleSetRule & { use: Array<RuleSetUseItem> } = {
     test: /\.vue$/,
     use: [
       isMultiCpu ? require.resolve('thread-loader') : '',
       require.resolve('vue-loader'),
     ].filter(item => item),
     include: [/src/],
-  }
+  };
 
-  const devOptions = [eslintLoader]
+  const devOptions = [eslintLoader];
 
   // 开发环境启用eslint-loader
-  if (mode === 'development') options.use.push(...devOptions)
+  if (mode === 'development') options.use.push(...devOptions);
 
-  return options
-}
+  return options;
+};
 
-exports.CssLoader = module => {
-  const result = {
+export const genCssLoader = (mode: modeType, module: boolean): RuleSetRule => {
+  const result: RuleSetRule & { oneOf: RuleSetRule[] } = {
     test: /\.css$/,
     oneOf: [
       // 这里匹配普通的 `<style>` 或 `<style scoped>`
@@ -70,7 +73,7 @@ exports.CssLoader = module => {
         ],
       },
     ],
-  }
+  };
 
   //  开启css-module
   if (module) {
@@ -92,13 +95,16 @@ exports.CssLoader = module => {
           require.resolve('postcss-loader'),
         ],
       }
-    )
+    );
   }
-  return result
-}
+  return result;
+};
 
-exports.LessLoader = ({ prependData }) => {
-  const result = {
+export const genLessLoader = (
+  mode: modeType,
+  prependData: Array<string> | undefined
+): RuleSetRule => {
+  const result: RuleSetRule & { use: RuleSetUseItem[] } = {
     test: /\.less$/,
     use: [
       mode === 'production'
@@ -113,7 +119,7 @@ exports.LessLoader = ({ prependData }) => {
         },
       },
     ],
-  }
+  };
 
   if (prependData && prependData.length > 0) {
     result.use.push({
@@ -121,14 +127,17 @@ exports.LessLoader = ({ prependData }) => {
       options: {
         resources: prependData,
       },
-    })
+    });
   }
 
-  return result
-}
+  return result;
+};
 
-exports.SassLoader = ({ prependData }) => {
-  const result = {
+export const genSassLoader = (
+  mode: modeType,
+  prependData: Array<string> | undefined
+): RuleSetRule => {
+  const result: RuleSetRule & { use: RuleSetUseItem[] } = {
     test: /\.s(a|c)ss$/,
     use: [
       mode === 'production'
@@ -138,7 +147,7 @@ exports.SassLoader = ({ prependData }) => {
       require.resolve('postcss-loader'),
       require.resolve('sass-loader'),
     ],
-  }
+  };
 
   if (prependData && prependData.length > 0) {
     result.use.push({
@@ -146,15 +155,15 @@ exports.SassLoader = ({ prependData }) => {
       options: {
         resources: prependData,
       },
-    })
+    });
   }
 
-  return result
-}
+  return result;
+};
 
-exports.StaticsLoader = () => {
+export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
   const name =
-    mode === 'production' ? '[name][contenthash:8].[ext]' : '[name].[ext]'
+    mode === 'production' ? '[name][contenthash:8].[ext]' : '[name].[ext]';
 
   // 图片资源解析器
   const imgResolver = {
@@ -169,7 +178,7 @@ exports.StaticsLoader = () => {
       },
       // 'image-webpack-loader',
     ],
-  }
+  };
 
   // 字体资源解析器
   const fontResolver = {
@@ -178,7 +187,7 @@ exports.StaticsLoader = () => {
     options: {
       name: `assets/fonts/${name}`,
     },
-  }
+  };
 
   // 视频&音频资源解析器
   const mediaResolver = {
@@ -187,7 +196,7 @@ exports.StaticsLoader = () => {
     options: {
       name: `assets/media/${name}`,
     },
-  }
+  };
 
-  return [imgResolver, fontResolver, mediaResolver]
-}
+  return [imgResolver, fontResolver, mediaResolver];
+};

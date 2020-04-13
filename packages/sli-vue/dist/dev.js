@@ -7,14 +7,13 @@ var ora_1 = __importDefault(require("ora"));
 var webpack_1 = __importDefault(require("webpack"));
 var webpack_dev_server_1 = __importDefault(require("webpack-dev-server"));
 var get_cli_config_1 = __importDefault(require("./utils/get_cli_config"));
-var path_1 = __importDefault(require("path"));
 exports.default = (function (port) {
     var _a, _b;
     var loading = ora_1.default();
     loading.start('app is starting...');
     // set enviroment
     process.env.NODE_ENV = 'development';
-    var config = get_cli_config_1.default(path_1.default.resolve(__dirname, '../sources/webpack.dev'));
+    var config = get_cli_config_1.default('development');
     var compiler = webpack_1.default(config);
     compiler.hooks.done.tap('buildTip', function () {
         loading.succeed("compile successfully!\n      please open  http://localhost:" + port);

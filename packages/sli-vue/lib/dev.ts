@@ -2,7 +2,6 @@ import ora from 'ora';
 import Webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
 import getCliConfig from './utils/get_cli_config';
-import path from 'path';
 
 export default (port: number): void => {
   const loading = ora();
@@ -11,9 +10,7 @@ export default (port: number): void => {
   // set enviroment
   process.env.NODE_ENV = 'development';
 
-  const config = getCliConfig(
-    path.resolve(__dirname, '../sources/webpack.dev')
-  );
+  const config = getCliConfig('development');
 
   const compiler = Webpack(config);
   compiler.hooks.done.tap('buildTip', () => {

@@ -1,7 +1,6 @@
 import ora from 'ora';
 import Webpack from 'webpack';
 import chalk from 'chalk';
-import path from 'path';
 
 import getCliConfig from './utils/get_cli_config';
 
@@ -12,10 +11,7 @@ export default (analysis: boolean): void => {
   // set enviroment
   process.env.NODE_ENV = 'production';
 
-  const config = getCliConfig(
-    path.resolve(__dirname, '../sources/webpack.prod'),
-    { analysis }
-  );
+  const config = getCliConfig('production', { analysis });
 
   const compiler = Webpack(config);
 
