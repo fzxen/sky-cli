@@ -10,7 +10,7 @@ program
   .alias('d')
   .option('-p, --port <port>', 'Port used by the server (default: 8080)')
   .action(cmdObj => {
-    dev(cmdObj.port || 8080);
+    dev(cmdObj.port);
   });
 program
   .command('build')

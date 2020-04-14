@@ -43,7 +43,7 @@ const download = (options: QueryOptions): Promise<QueryOptions> => {
 
 const updateProject = (options: QueryOptions): Promise<void> => {
   return updatePackage(`${options.name}/package.json`, options)
-    .then(() => createCliConfig(`${options.name}/cli.config.js`))
+    .then(() => createCliConfig(`${options.name}/sli.config.js`))
     .then(() => {
       // TODO
       console.log(symbol.success, chalk.green('project has been updated'));

@@ -36,7 +36,7 @@ var download = function (options) {
 };
 var updateProject = function (options) {
     return update_1.updatePackage(options.name + "/package.json", options)
-        .then(function () { return update_1.createCliConfig(options.name + "/cli.config.js"); })
+        .then(function () { return update_1.createCliConfig(options.name + "/sli.config.js"); })
         .then(function () {
         // TODO
         console.log(log_symbols_1.default.success, chalk_1.default.green('project has been updated'));
@@ -47,8 +47,8 @@ var successTip = function (name) {
     return [
         chalk_1.default.green('app has been created successfully\n'),
         "\t cd " + name,
-        '\t sli init',
-        '\t sli dev',
+        '\t npm install',
+        '\t npm start',
     ].join('\n');
 };
 exports.default = (function (name) {

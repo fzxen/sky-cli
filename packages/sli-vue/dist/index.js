@@ -13,7 +13,7 @@ program
     .alias('d')
     .option('-p, --port <port>', 'Port used by the server (default: 8080)')
     .action(function (cmdObj) {
-    dev_1.default(cmdObj.port || 8080);
+    dev_1.default(cmdObj.port);
 });
 program
     .command('build')

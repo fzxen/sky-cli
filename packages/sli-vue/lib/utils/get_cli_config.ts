@@ -51,12 +51,17 @@ const defaultCliConfig: sliConfiguration = {
   analysis: false,
 };
 
+interface Options {
+  port?: number;
+  analysis?: boolean;
+}
+
 export default (
   mode: 'development' | 'production',
-  options: object = {}
+  options: Options
 ): Configuration => {
   function getConfig(): Configuration {
-    const cliConfig = require(`${process.cwd()}/cli.config.js`); // eslint-disable-line
+    const cliConfig = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
 
     const { configureWebpack, chainWebpack, devServer, ...args } = WebpackMerge(
       defaultCliConfig as Configuration,
@@ -66,6 +71,7 @@ export default (
     const chainConfig = new WebpackChain();
     chainWebpack(chainConfig);
 
+    if (options.port) devServer.port = options.port;
     return WebpackMerge(
       genWebpackConfig(mode, Object.assign(args, options) as sliConfiguration),
       configureWebpack,

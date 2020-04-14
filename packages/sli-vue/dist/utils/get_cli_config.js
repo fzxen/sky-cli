@@ -61,12 +61,13 @@ var defaultCliConfig = {
     analysis: false,
 };
 exports.default = (function (mode, options) {
-    if (options === void 0) { options = {}; }
     function getConfig() {
-        var cliConfig = require(process.cwd() + "/cli.config.js"); // eslint-disable-line
+        var cliConfig = require(process.cwd() + "/sli.config.js"); // eslint-disable-line
         var _a = webpack_merge_1.default(defaultCliConfig, cliConfig), configureWebpack = _a.configureWebpack, chainWebpack = _a.chainWebpack, devServer = _a.devServer, args = __rest(_a, ["configureWebpack", "chainWebpack", "devServer"]);
         var chainConfig = new webpack_chain_1.default();
         chainWebpack(chainConfig);
+        if (options.port)
+            devServer.port = options.port;
         return webpack_merge_1.default(gen_webpack_1.default(mode, Object.assign(args, options)), configureWebpack, chainConfig.toConfig(), {
             devServer: devServer,
         });

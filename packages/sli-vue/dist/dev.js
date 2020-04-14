@@ -13,16 +13,16 @@ exports.default = (function (port) {
     loading.start('app is starting...');
     // set enviroment
     process.env.NODE_ENV = 'development';
-    var config = get_cli_config_1.default('development');
+    var config = get_cli_config_1.default('development', { port: port });
     var compiler = webpack_1.default(config);
+    port = ((_a = config.devServer) === null || _a === void 0 ? void 0 : _a.port) || 8080;
+    var host = ((_b = config.devServer) === null || _b === void 0 ? void 0 : _b.host) || 'localhost';
     compiler.hooks.done.tap('buildTip', function () {
-        loading.succeed("compile successfully!\n      please open  http://localhost:" + port);
+        loading.succeed("compile successfully!\n      please open  http://" + host + ":" + port);
     });
     compiler.hooks.failed.tap('buildTip', function (err) {
         loading.fail('conmpile failed');
         console.log(err);
     });
-    port = port || ((_a = config.devServer) === null || _a === void 0 ? void 0 : _a.port) || 8080;
-    var host = ((_b = config.devServer) === null || _b === void 0 ? void 0 : _b.host) || 'localhost';
     new webpack_dev_server_1.default(compiler, config.devServer || {}).listen(port, host);
 });

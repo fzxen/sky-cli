@@ -51,5 +51,5 @@ exports.updatePackage = function (path, obj) {
     });
 };
 exports.createCliConfig = function (path) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/, fs_1.copyFileSync(path_1.resolve(__dirname, '../../sources/cli.config.js'), path)];
+    return [2 /*return*/, fs_1.copyFileSync(path_1.resolve(__dirname, '../../sources/sli.config.js'), path)];
 }); }); };

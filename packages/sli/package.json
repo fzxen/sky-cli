@@ -1,8 +1,8 @@
 {
   "name": "@poloris/sky-cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +19,8 @@
     "inquirer": "^7.1.0",
     "log-symbols": "^3.0.0",
     "ora": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^6.5.0"
   }
 }
