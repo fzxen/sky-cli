@@ -27,7 +27,7 @@ export default (analysis: boolean): void => {
     const result = stats.toJson();
     console.log(
       [
-        chalk.green(`Time：${result.time}ms`),
+        chalk.green(`Time: ${result.time}ms`),
         chalk.green(`webpack version: ${result.version}`),
       ].join('\n')
     );

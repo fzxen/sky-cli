@@ -41,6 +41,6 @@ export default (): void => {
       intall();
     }
   });
-  // TODO 判断 npm or yarn
+  // TODO ??� npm or yarn
   // exec('npm install', (err, stdout, stderr) => {})
 };
