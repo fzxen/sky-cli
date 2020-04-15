@@ -191,12 +191,20 @@ export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
 
   // 视频&音频资源解析器
   const mediaResolver = {
-    test: /\.(mp4|avi|mp3)$/i,
+    test: /\.(mp4|avi|mp3|rmvb|wmv|flv)$/i,
     loader: require.resolve('url-loader'),
     options: {
       name: `assets/media/${name}`,
     },
   };
 
-  return [imgResolver, fontResolver, mediaResolver];
+  const fileResolver = {
+    test: /\.(pdf|doc|docx|ppt|xls|xlsx)$/i,
+    loader: require.resolve('url-loader'),
+    options: {
+      name: `assets/files/${name}`,
+    },
+  };
+
+  return [imgResolver, fontResolver, mediaResolver, fileResolver];
 };
