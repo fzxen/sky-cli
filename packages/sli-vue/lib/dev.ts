@@ -23,7 +23,7 @@ export default (port: number | undefined): void => {
     );
   });
   compiler.hooks.failed.tap('buildTip', err => {
-    loading.fail('conmpile failed');
+    loading.fail('compile failed');
     console.log(err);
   });
 

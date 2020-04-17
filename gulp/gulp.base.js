@@ -15,8 +15,6 @@ module.exports = async key => {
   const path = `${rootPath}/lib/**/*.ts`;
   const outputPath = `${rootPath}/dist/`;
 
-  console.log(rootPath, path, outputPath);
-
   const tsProject = ts.createProject('../tsconfig.json');
 
   gulp.task('clean', async () => {
