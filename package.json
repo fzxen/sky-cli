@@ -4,8 +4,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build:sli": "gulp --gulpfile ./gulp/sli.gulp.js",
-    "build:vue": "gulp --gulpfile ./gulp/vue.gulp.js"
+    "watch:sli": "node rollup.config.js sli watch",
+    "build:sli": "node rollup.config.js sli",
+    "watch:vue": "node rollup.config.js sli-vue watch",
+    "build:vue": "node rollup.config.js sli-vue"
   },
   "repository": {
     "type": "git",
@@ -19,12 +21,13 @@
   },
   "homepage": "https://github.com/zxffan/cli#readme",
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.1.0",
+    "@rollup/plugin-json": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
-    "del": "^5.1.0",
-    "gulp": "^4.0.2",
-    "gulp-eslint": "^6.0.0",
-    "gulp-typescript": "^6.0.0-alpha.1",
+    "rollup": "^2.7.2",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "^0.27.0",
     "typescript": "^3.8.3"
   }
 }

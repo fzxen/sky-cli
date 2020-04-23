@@ -17,4 +17,4 @@ export const updatePackage = (path: string, obj: object): Promise<void> => {
 };
 
 export const createCliConfig = async (path: string): Promise<void> =>
-  copyFileSync(resolve(__dirname, '../../sources/sli.config.js'), path);
+  copyFileSync(resolve(__dirname, '../sources/sli.config.js'), path);

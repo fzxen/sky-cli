@@ -55,7 +55,7 @@ const successTip = (name: string): string =>
   [
     chalk.green('app has been created successfully\n'),
     `\t cd ${name}`,
-    '\t npm install',
+    '\t npm install or yarn',
     '\t npm start',
   ].join('\n');
 

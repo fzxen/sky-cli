@@ -1,45 +1,16 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var commander_1 = require("commander");
-var create_1 = __importDefault(require("./create"));
-var init_1 = __importDefault(require("./init"));
-var program = new commander_1.Command();
-program
-    .command('create <name>')
-    .description('create a new project')
-    .alias('c')
-    .action(function (name) {
-    create_1.default(name);
-});
-program
-    .command('init')
-    .description('initialize project')
-    .alias('i')
-    .action(function () {
-    init_1.default();
-});
-// program
-//   .command('dev')
-//   .description('run your app in development')
-//   .alias('d')
-//   .option('-p, --port <port>', 'Port used by the server (default: 8080)')
-//   .action(cmdObj => {
-//     dev(cmdObj.port || 8080);
-//   });
-// program
-//   .command('build')
-//   .description('build your app (production)')
-//   .alias('b')
-//   .option('-a, --analysis', 'show buldle information')
-//   .action(cmdObj => {
-//     build(cmdObj.analysis);
-//   });
-program
-    .version(require('../package.json').version, '-v --version')
-    .parse(process.argv);
-// show help info when no params
-if (!process.argv.slice(2).length)
-    program.outputHelp();
+"use strict";function e(e){return e&&"object"==typeof e&&"default"in e?e.default:e}var n=require("commander"),t=e(require("log-symbols")),r=e(require("chalk")),i=e(require("ora")),o=e(require("inquirer")),a=e(require("download-git-repo")),c=require("fs"),u=require("path"),s=require("child_process"),l=function(e){return null==e},f={vue:{url:"direct:https://gitee.com/zxffan/templates.git#vue-spa"},react:{url:""},electron:{url:""}};
+/*! *****************************************************************************
+Copyright (c) Microsoft Corporation. All rights reserved.
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use
+this file except in compliance with the License. You may obtain a copy of the
+License at http://www.apache.org/licenses/LICENSE-2.0
+
+THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
+WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
+MERCHANTABLITY OR NON-INFRINGEMENT.
+
+See the Apache Version 2.0 License for specific language governing permissions
+and limitations under the License.
+***************************************************************************** */
+function p(e,n,t,r){return new(t||(t=Promise))((function(i,o){function a(e){try{u(r.next(e))}catch(e){o(e)}}function c(e){try{u(r.throw(e))}catch(e){o(e)}}function u(e){var n;e.done?i(e.value):(n=e.value,n instanceof t?n:new t((function(e){e(n)}))).then(a,c)}u((r=r.apply(e,n||[])).next())}))}function d(e,n){var t,r,i,o,a={label:0,sent:function(){if(1&i[0])throw i[1];return i[1]},trys:[],ops:[]};return o={next:c(0),throw:c(1),return:c(2)},"function"==typeof Symbol&&(o[Symbol.iterator]=function(){return this}),o;function c(o){return function(c){return function(o){if(t)throw new TypeError("Generator is already executing.");for(;a;)try{if(t=1,r&&(i=2&o[0]?r.return:o[0]?r.throw||((i=r.return)&&i.call(r),0):r.next)&&!(i=i.call(r,o[1])).done)return i;switch(r=0,i&&(o=[2&o[0],i.value]),o[0]){case 0:case 1:i=o;break;case 4:return a.label++,{value:o[1],done:!1};case 5:a.label++,r=o[1],o=[0];continue;case 7:o=a.ops.pop(),a.trys.pop();continue;default:if(!(i=a.trys,(i=i.length>0&&i[i.length-1])||6!==o[0]&&2!==o[0])){a=0;continue}if(3===o[0]&&(!i||o[1]>i[0]&&o[1]<i[3])){a.label=o[1];break}if(6===o[0]&&a.label<i[1]){a.label=i[1],i=o;break}if(i&&a.label<i[2]){a.label=i[2],a.ops.push(o);break}i[2]&&a.ops.pop(),a.trys.pop();continue}o=n.call(e,a)}catch(e){o=[6,e],r=0}finally{t=i=0}if(5&o[0])throw o[1];return{value:o[0]?o[1]:void 0,done:!0}}([o,c])}}}var m=function(e){return function(e,n){return new Promise((function(t){if(c.existsSync(e)){var r=c.readFileSync(e).toString(),i=JSON.parse(r);Object.assign(i,n),c.writeFileSync(e,JSON.stringify(i,null,"\t")),t()}}))}(e.name+"/package.json",e).then((function(){return n=e.name+"/sli.config.js",p(void 0,void 0,void 0,(function(){return d(this,(function(e){return[2,c.copyFileSync(u.resolve(__dirname,"../sources/sli.config.js"),n)]}))}));var n})).then((function(){console.log(t.success,r.green("project has been updated"))}))},h=function(e){(function(e){return new Promise((function(n,t){l(e)&&t(new Error("name must be provided")),c.existsSync(e)?t(new Error(e+" has existed")):n()}))})(e).then((function(){return o.prompt(function(e){return[{type:"list",name:"frame",message:"please choose this project template",choices:["vue","react","electron"]},{type:"input",name:"name",message:"Please enter the project name: ",default:e,validate:function(e){return!!e||"you must provide the name"}},{type:"input",name:"description",message:"Please enter the project description: ",validate:function(e){return!!e||"you must provide the description"}},{type:"input",name:"author",message:"Please enter the author name: ",default:"fanzhongxu",validate:function(e){return!!e||"you must provide the author"}}]}(e))})).then((function(e){return n=e,new Promise((function(e,t){var r=n.name,o=n.frame,c=i();c.start("downloading...");var u=f[o];u.url||(c.fail(o+" is not provided for now"),t(new Error)),a(u.url,r,{clone:!0},(function(r){r?(c.fail("download failed, please check your network"),t(r)):(c.succeed("download successfully"),e(n))}))}));var n})).then((function(e){return m(e)})).then((function(){console.log(t.success,function(e){return[r.green("app has been created successfully\n"),"\t cd "+e,"\t npm install or yarn","\t npm start"].join("\n")}(e))})).catch((function(e){e.message&&console.log(t.error,r.red(e.message))}))};var g=function(){o.prompt([{type:"confirm",message:"Do you need initialize a git repository",name:"git",default:!1}]).then((function(e){var n;e instanceof Object&&"git"in e&&(e.git&&((n=i()).start("git repository initializing..."),s.exec("git init",(function(e){l(e)?n.succeed("git repository initialize successfully"):n.fail("git repository initialization failed")}))),function(){var e=i();e.start("npm installing..."),s.exec("npm install",(function(n,i,o){console.log(t.success,r.green(i)),console.log(t.error,r.red(o)),l(n)?e.succeed("npm install successfully"):e.fail("npm install failed")}))}())}))},y=new n.Command;y.command("create <name>").description("create a new project").alias("c").action((function(e){h(e)})),y.command("init").description("initialize project").alias("i").action((function(){g()})),y.version(require("../package.json").version,"-v --version").parse(process.argv),process.argv.slice(2).length||y.outputHelp();
