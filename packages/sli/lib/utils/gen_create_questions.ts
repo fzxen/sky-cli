@@ -40,6 +40,24 @@ const genQuestions = (name: string): QuestionCollection<Answers> => {
         return true;
       },
     },
+    {
+      type: 'confirm',
+      message: 'Do you need eslint(standard&prettier)',
+      name: 'eslint',
+      default: true,
+    },
+    {
+      type: 'confirm',
+      message: 'Do you need git hook to lint your commit message',
+      name: 'commitLint',
+      default: true,
+    },
+    {
+      type: 'confirm',
+      message: 'Do you need git hook to lint your code(eslint muse be checked)',
+      name: 'codeLint',
+      default: true,
+    },
   ];
 };
 

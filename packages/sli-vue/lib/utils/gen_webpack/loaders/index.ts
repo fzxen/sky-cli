@@ -19,7 +19,10 @@ const eslintLoader: RuleSetUseItem = {
   },
 };
 
-export const genJsLoader = (mode: modeType): RuleSetRule => {
+export const genJsLoader = (
+  mode: modeType,
+  eslintCompileCheck: boolean | undefined
+): RuleSetRule => {
   const options: RuleSetRule & { use: Array<RuleSetUseItem> } = {
     test: /\.(js)$/,
     use: [
@@ -34,13 +37,17 @@ export const genJsLoader = (mode: modeType): RuleSetRule => {
 
   const devOptions = [eslintLoader];
 
-  // 开发环境启用eslint-loader
-  if (mode === 'development') options.use.push(...devOptions);
+  // 启用eslint-loader
+  const isCheck = eslintCompileCheck !== false;
+  if (mode === 'development' && isCheck) options.use.push(...devOptions);
 
   return options;
 };
 
-export const genVueLoader = (mode: modeType): RuleSetRule => {
+export const genVueLoader = (
+  mode: modeType,
+  eslintCompileCheck: boolean | undefined
+): RuleSetRule => {
   const options: RuleSetRule & { use: Array<RuleSetUseItem> } = {
     test: /\.vue$/,
     use: [
@@ -53,7 +60,8 @@ export const genVueLoader = (mode: modeType): RuleSetRule => {
   const devOptions = [eslintLoader];
 
   // 开发环境启用eslint-loader
-  if (mode === 'development') options.use.push(...devOptions);
+  const isCheck = eslintCompileCheck !== false;
+  if (mode === 'development' && isCheck) options.use.push(...devOptions);
 
   return options;
 };

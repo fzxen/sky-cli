@@ -29,15 +29,19 @@ import genTerserPlugin from './plugins/gen_terser_plugin';
 
 import SliConfiguration from '../../interface/sli_configuration';
 
+type GenOptionType = Omit<
+  SliConfiguration,
+  'configureWebpack' | 'chainWebpack' | 'devServer'
+>;
+
 function genCommon(
   mode: 'development' | 'production',
-  options: SliConfiguration
+  options: GenOptionType
 ): Configuration {
   // option - analysis cdn css
-  const analysis = options.analysis;
-  const css = options.css;
+
+  const { analysis, css, cdn, eslintCompileCheck } = options;
   const loaderOption = css.loaderOption;
-  const cdn = options.cdn;
 
   // * 处理cdn
   let externals = {};
@@ -58,8 +62,8 @@ function genCommon(
         genCssLoader(mode, css.module),
         ...genStaticsLoader(mode),
         genSassLoader(mode, loaderOption['scss']?.prependData),
-        genVueLoader(mode),
-        genJsLoader(mode),
+        genVueLoader(mode, eslintCompileCheck),
+        genJsLoader(mode, eslintCompileCheck),
         genLessLoader(mode, loaderOption['less']?.prependData),
       ],
     },
@@ -80,7 +84,7 @@ function genCommon(
 
 function genDev(
   mode: 'development' | 'production',
-  options: SliConfiguration
+  options: GenOptionType
 ): Configuration {
   const common = genCommon(mode, options);
   return merge(common, {
@@ -113,7 +117,7 @@ function genDev(
 
 function genProd(
   mode: 'development' | 'production',
-  options: SliConfiguration
+  options: GenOptionType
 ): Configuration {
   const common = genCommon(mode, options);
   return merge(common, {
@@ -155,7 +159,7 @@ function genProd(
 
 export default (
   mode: 'development' | 'production',
-  option: SliConfiguration
+  option: GenOptionType
 ): Configuration => {
   return mode === 'development' ? genDev(mode, option) : genProd(mode, option);
 };

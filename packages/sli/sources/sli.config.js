@@ -136,7 +136,14 @@ module.exports = {
   /**
    * * property: analysis
    * * type: boolean
-   * * 若为tru， 打包时会启用BundleAnalyzerPlugin
+   * * 若为true， 打包时会启用BundleAnalyzerPlugin
    */
   analysis: false,
+
+  /**
+   * * property: eslintCompileCheck
+   * * type: boolean
+   * * 是否开启eslint编译时检查（项目需要安装eslint）
+   */
+  eslintCompileCheck: true,
 };

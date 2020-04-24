@@ -72,8 +72,9 @@ export default (
     chainWebpack(chainConfig);
 
     if (options.port) devServer.port = options.port;
+    if (options.analysis) args.analysis = options.analysis;
     return WebpackMerge(
-      genWebpackConfig(mode, Object.assign(args, options) as sliConfiguration),
+      genWebpackConfig(mode, args),
       configureWebpack,
       chainConfig.toConfig(),
       {

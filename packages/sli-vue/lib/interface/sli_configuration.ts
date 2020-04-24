@@ -34,5 +34,7 @@ export default interface SliConfig {
 
   css: CssConfiguration;
 
-  analysis: boolean;
+  analysis?: boolean;
+
+  eslintCompileCheck?: boolean;
 }

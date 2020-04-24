@@ -5,13 +5,18 @@
   "main": "./dist/index.js",
   "scripts": {},
   "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zxffan/sky-cli.git"
+  },
+  "homepage": "https://github.com/zxffan/sky-cli/tree/master/packages/sli-vue#readme",
+  "author": "zxffan",
   "license": "ISC",
   "bin": {
+    "sky-cli-vue": "./bin/cmd",
     "sli-vue": "./bin/cmd"
   },
   "dependencies": {
-    "@babel/core": "^7.9.0",
     "babel-loader": "^8.1.0",
     "chalk": "^3.0.0",
     "clean-webpack-plugin": "^3.0.0",
@@ -28,10 +33,10 @@
     "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "ora": "^4.0.3",
+    "ora": "^4.0.4",
     "postcss-loader": "^3.0.0",
     "sass-loader": "^8.0.2",
-    "sass-resources-loader": "^2.0.1",
+    "sass-resources-loader": "^2.0.3",
     "terser-webpack-plugin": "^2.3.5",
     "thread-loader": "^2.1.3",
     "url-loader": "^4.0.0",

@@ -9,12 +9,7 @@ import gitSources from './utils/git_sources';
 import { updatePackage, createCliConfig } from './utils/update';
 import genQuestions from './utils/gen_create_questions';
 
-interface QueryOptions {
-  name: string; // 项目名称
-  frame: 'vue' | 'react' | 'electron'; // 框架
-  description: string; // 项目描述
-  author: string;
-}
+import QueryOptions from './interface/create_query_options';
 
 const download = (options: QueryOptions): Promise<QueryOptions> => {
   return new Promise((resolve, reject) => {
