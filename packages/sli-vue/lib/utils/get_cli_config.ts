@@ -1,4 +1,4 @@
-import { Configuration } from 'webpack';
+import { Configuration, RuleSetRule } from 'webpack';
 import WebpackChain from 'webpack-chain';
 import WebpackMerge from 'webpack-merge';
 import genWebpackConfig from '../utils/gen_webpack';
@@ -73,7 +73,7 @@ export default (
 
     if (options.port) devServer.port = options.port;
     if (options.analysis) args.analysis = options.analysis;
-    return WebpackMerge(
+    const config = WebpackMerge(
       genWebpackConfig(mode, args),
       configureWebpack,
       chainConfig.toConfig(),
@@ -81,6 +81,23 @@ export default (
         devServer,
       } as Configuration
     );
+
+    // 去除重复loader
+    config!.module!.rules = config!
+      .module!.rules.reverse()
+      .reduce<RuleSetRule[]>((rules, rule) => {
+        const isExist = rules.some(
+          item => item?.test?.toString() === rule?.test?.toString()
+        );
+
+        if (!isExist) {
+          rules.push(rule);
+        }
+        return rules;
+      }, [])
+      .reverse();
+
+    return config;
   }
 
   return getConfig();

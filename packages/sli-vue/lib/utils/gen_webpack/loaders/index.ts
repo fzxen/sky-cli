@@ -182,6 +182,7 @@ export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
         options: {
           limit: 3 * 1024, // 3K
           name: `assets/images/${name}`,
+          esModule: false,
         },
       },
       // 'image-webpack-loader',
@@ -194,6 +195,7 @@ export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
     loader: require.resolve('url-loader'),
     options: {
       name: `assets/fonts/${name}`,
+      esModule: false,
     },
   };
 
@@ -203,6 +205,7 @@ export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
     loader: require.resolve('url-loader'),
     options: {
       name: `assets/media/${name}`,
+      esModule: false,
     },
   };
 
@@ -211,6 +214,7 @@ export const genStaticsLoader = (mode: modeType): RuleSetRule[] => {
     loader: require.resolve('url-loader'),
     options: {
       name: `assets/files/${name}`,
+      esModule: false,
     },
   };
 
