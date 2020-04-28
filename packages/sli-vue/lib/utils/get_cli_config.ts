@@ -1,8 +1,9 @@
 import { Configuration, RuleSetRule } from 'webpack';
 import WebpackChain from 'webpack-chain';
-import WebpackMerge from 'webpack-merge';
+// import WebpackMerge from 'webpack-merge';
 import genWebpackConfig from '../utils/gen_webpack';
 import sliConfiguration from '../interface/sli_configuration';
+import deepMerge from './deep_merge';
 
 const defaultCliConfig: sliConfiguration = {
   cdn: false,
@@ -61,10 +62,10 @@ export default (
   options: Options
 ): Configuration => {
   function getConfig(): Configuration {
-    const cliConfig = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
+    const cliConfig: sliConfiguration = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
 
-    const { configureWebpack, chainWebpack, devServer, ...args } = WebpackMerge(
-      defaultCliConfig as Configuration,
+    const { configureWebpack, chainWebpack, devServer, ...args } = deepMerge(
+      defaultCliConfig,
       cliConfig
     ) as sliConfiguration;
 
@@ -73,7 +74,7 @@ export default (
 
     if (options.port) devServer.port = options.port;
     if (options.analysis) args.analysis = options.analysis;
-    const config = WebpackMerge(
+    const config = deepMerge(
       genWebpackConfig(mode, args),
       configureWebpack,
       chainConfig.toConfig(),

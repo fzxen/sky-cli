@@ -1,6 +1,6 @@
 import { Configuration, Plugin } from 'webpack';
-import merge from 'webpack-merge'; // TODO fan 自定义merge算法
 import HtmlCdns from '../../interface/html_cdns';
+import deepMerge from '../deep_merge';
 
 import genCdn from './gen_cdn';
 import absolute from './absolute';
@@ -87,7 +87,7 @@ function genDev(
   options: GenOptionType
 ): Configuration {
   const common = genCommon(mode, options);
-  return merge(common, {
+  return deepMerge(common, {
     output: {
       publicPath: '/',
       filename: 'assets/[name].js',
@@ -120,7 +120,7 @@ function genProd(
   options: GenOptionType
 ): Configuration {
   const common = genCommon(mode, options);
-  return merge(common, {
+  return deepMerge(common, {
     output: {
       publicPath: '/',
       filename: 'assets/[name][chunkhash:8].js',
