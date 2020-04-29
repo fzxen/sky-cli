@@ -26,70 +26,68 @@ const isSet = (p: unknown): p is Set<unknown> => {
   return getTypeof(p) === 'set';
 };
 
-const mergeArray = <T>(a: T[], b: T[]): void => {
-  a.splice(a.length, b.length, ...b);
-};
-
-const mergeObject = (a: Target, b: Target): void => {
-  for (const key in b) {
-    if (Object.prototype.hasOwnProperty.call(b, key)) {
-      const value = b[key];
+const merger = {
+  mergeArray<T>(a: T[], b: T[]): void {
+    a.splice(a.length, b.length, ...b);
+  },
+  mergeSet(a: Set<unknown>, b: Set<unknown>): void {
+    b.forEach(e => a.add(e));
+  },
+  mergeMap(a: Map<string, unknown>, b: Map<string, unknown>): void {
+    b.forEach((value, key) => {
       if (isArray(value)) {
-        a[key] ?? (a[key] = []);
-        mergeArray(a[key] as unknown[], value);
+        !a.has(key) && a.set(key, []);
+        this.mergeArray(a.get(key) as unknown[], value);
       } else if (isObject(value)) {
-        a[key] ?? (a[key] = {});
-        mergeObject(a[key] as Target, value);
+        !a.has(key) && a.set(key, {});
+        this.mergeObject(a.get(key) as Target, value);
       } else if (isMap(value)) {
-        a[key] ?? (a[key] = new Map());
-        mergeMap(a[key] as Map<string, unknown>, value);
+        !a.has(key) && a.set(key, new Map());
+        this.mergeMap(a.get(key) as Map<string, unknown>, value);
       } else if (isSet(value)) {
-        a[key] ?? (a[key] = new Set());
-        mergeSet(a[key] as Set<unknown>, value);
+        !a.has(key) && a.set(key, new Set());
+        this.mergeSet(a.get(key) as Set<unknown>, value);
       } else {
-        a[key] = value;
+        a.set(key, value);
+      }
+    });
+  },
+  mergeObject(a: Target, b: Target): void {
+    this['mergeArray'];
+    for (const key in b) {
+      if (Object.prototype.hasOwnProperty.call(b, key)) {
+        const value = b[key];
+        if (isArray(value)) {
+          a[key] ?? (a[key] = []);
+          this.mergeArray(a[key] as unknown[], value);
+        } else if (isObject(value)) {
+          a[key] ?? (a[key] = {});
+          this.mergeObject(a[key] as Target, value);
+        } else if (isMap(value)) {
+          a[key] ?? (a[key] = new Map());
+          this.mergeMap(a[key] as Map<string, unknown>, value);
+        } else if (isSet(value)) {
+          a[key] ?? (a[key] = new Set());
+          this.mergeSet(a[key] as Set<unknown>, value);
+        } else {
+          a[key] = value;
+        }
       }
     }
-  }
+  },
 };
 
-const mergeMap = (a: Map<string, unknown>, b: Map<string, unknown>): void => {
-  console.log(a, b);
-
-  b.forEach((value, key) => {
-    if (isArray(value)) {
-      !a.has(key) && a.set(key, []);
-      mergeArray(a.get(key) as unknown[], value);
-    } else if (isObject(value)) {
-      !a.has(key) && a.set(key, {});
-      mergeObject(a.get(key) as Target, value);
-    } else if (isMap(value)) {
-      !a.has(key) && a.set(key, new Map());
-      mergeMap(a.get(key) as Map<string, unknown>, value);
-    } else if (isSet(value)) {
-      !a.has(key) && a.set(key, new Set());
-      mergeSet(a.get(key) as Set<unknown>, value);
-    } else {
-      a.set(key, value);
-    }
-  });
-};
-
-const mergeSet = (a: Set<unknown>, b: Set<unknown>): void => {
-  b.forEach(e => a.add(e));
-};
-
-const mergeElement = <T>(target: T, element: T) => {
+const mergeElement = <T>(target: T, element: T): void => {
   if (getTypeof(target) !== getTypeof(element)) {
-    throw new Error('[error]: 字段名必须一致');
+    throw new Error('[error]: 相同字段类型必须一致');
   } else if (isArray(element)) {
-    isArray(target) && mergeArray(target, element);
+    isArray(target) && merger.mergeArray(target, element);
   } else if (isObject(element)) {
-    isObject(target) && mergeObject(target, element);
+    isObject(target) && merger.mergeObject(target, element);
   } else if (isMap(element)) {
-    isMap(target) && mergeMap(target, element);
+    isMap(target) && merger.mergeMap(target, element);
   } else if (isSet(element)) {
-    isSet(target) && mergeSet(target, element);
+    isSet(target) && merger.mergeSet(target, element);
   } else {
     target = element;
   }

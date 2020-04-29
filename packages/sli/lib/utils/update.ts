@@ -7,11 +7,20 @@ import {
 } from 'fs';
 import { resolve } from 'path';
 
+import Packages from '../interface/packages_type';
 import QueryOptions from '../interface/create_query_options';
 import depVersions from '../enums/dependencies';
 
+export const createCliConfig = async (path: string): Promise<void> =>
+  copyFileSync(resolve(__dirname, '../sources/sli.config.js'), path);
+
+export const createCommitlintrc = (path: string): void =>
+  copyFile(resolve(__dirname, '../sources/.commitlintrc.js'), path, err => {
+    if (err) throw new Error('.commitlintrc.js failed to create');
+  });
+
 // 更新 vue 相关
-const updateVue = (options: QueryOptions, json: any) => {
+const updateVue = (options: QueryOptions, json: Packages): Packages => {
   // eslint-vue
   const { name, eslint } = options;
 
@@ -32,12 +41,16 @@ const updateVue = (options: QueryOptions, json: any) => {
     copyFile(
       resolve(__dirname, '../sources/vue/.eslintrc.js'),
       `${name}/.eslintrc.js`,
-      () => {}
+      err => {
+        if (err) throw new Error('.eslintrc.js failed to create');
+      }
     );
     copyFile(
       resolve(__dirname, '../sources/vue/.eslintignore'),
       `${name}/.eslintignore`,
-      () => {}
+      err => {
+        if (err) throw new Error('.elsintignore failed to create');
+      }
     );
   }
 
@@ -48,7 +61,7 @@ const updateVue = (options: QueryOptions, json: any) => {
 };
 
 // 设置git hook
-const setHook = (options: QueryOptions, json: any) => {
+const setHook = (options: QueryOptions, json: Packages): Packages => {
   const { name, codeLint, commitLint, eslint } = options;
   // git hook
   if (commitLint || (eslint && codeLint))
@@ -90,7 +103,7 @@ export const updatePackage = (
   return new Promise(resolve => {
     if (existsSync(path)) {
       const data = readFileSync(path).toString();
-      let json = JSON.parse(data);
+      let json: Packages = JSON.parse(data);
 
       // 更新基础字段
       const { name, description, author, frame } = options;
@@ -105,9 +118,3 @@ export const updatePackage = (
     }
   });
 };
-
-export const createCliConfig = async (path: string): Promise<void> =>
-  copyFileSync(resolve(__dirname, '../sources/sli.config.js'), path);
-
-export const createCommitlintrc = (path: string): void =>
-  copyFile(resolve(__dirname, '../sources/.commitlintrc.js'), path, () => {});

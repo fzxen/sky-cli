@@ -50,6 +50,13 @@ const defaultCliConfig: sliConfiguration = {
    * * 若为tru， 打包时会启用BundleAnalyzerPlugin
    */
   analysis: false,
+
+  /**
+   * * property: eslintCompileCheck
+   * * type: boolean
+   * * 是否开启eslint编译时检查（项目需要安装eslint）
+   */
+  eslintCompileCheck: true,
 };
 
 interface Options {
@@ -62,7 +69,12 @@ export default (
   options: Options
 ): Configuration => {
   function getConfig(): Configuration {
-    const cliConfig: sliConfiguration = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
+    let cliConfig: sliConfiguration;
+    try {
+      cliConfig = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
+    } catch (e) {
+      cliConfig = defaultCliConfig;
+    }
 
     const { configureWebpack, chainWebpack, devServer, ...args } = deepMerge(
       defaultCliConfig,
@@ -84,19 +96,21 @@ export default (
     );
 
     // 去除重复loader
-    config!.module!.rules = config!
-      .module!.rules.reverse()
-      .reduce<RuleSetRule[]>((rules, rule) => {
-        const isExist = rules.some(
-          item => item?.test?.toString() === rule?.test?.toString()
-        );
+    if (config?.module?.rules) {
+      config.module.rules = config.module.rules
+        .reverse()
+        .reduce<RuleSetRule[]>((rules, rule) => {
+          const isExist = rules.some(
+            item => item?.test?.toString() === rule?.test?.toString()
+          );
 
-        if (!isExist) {
-          rules.push(rule);
-        }
-        return rules;
-      }, [])
-      .reverse();
+          if (!isExist) {
+            rules.push(rule);
+          }
+          return rules;
+        }, [])
+        .reverse();
+    }
 
     return config;
   }

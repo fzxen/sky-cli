@@ -7,7 +7,8 @@
     "watch:sli": "node rollup.config.js sli watch",
     "build:sli": "node rollup.config.js sli",
     "watch:vue": "node rollup.config.js sli-vue watch",
-    "build:vue": "node rollup.config.js sli-vue"
+    "build:vue": "node rollup.config.js sli-vue",
+    "fix": "eslint --fix --ext .ts packages"
   },
   "repository": {
     "type": "git",
@@ -25,6 +26,7 @@
     "@rollup/plugin-json": "^4.0.3",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
+    "eslint": "^6.8.0",
     "rollup": "^2.7.2",
     "rollup-plugin-terser": "^5.3.0",
     "rollup-plugin-typescript2": "^0.27.0",
