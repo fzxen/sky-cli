@@ -89,7 +89,7 @@ function genDev(
   const common = genCommon(mode, options);
   return deepMerge(common, {
     output: {
-      publicPath: './',
+      publicPath: '/',
       filename: 'assets/[name].js',
       path: absolute('./dist'),
     },
@@ -122,7 +122,7 @@ function genProd(
   const common = genCommon(mode, options);
   return deepMerge(common, {
     output: {
-      publicPath: './',
+      publicPath: '/',
       filename: 'assets/[name][chunkhash:8].js',
       path: absolute('./dist'),
     },

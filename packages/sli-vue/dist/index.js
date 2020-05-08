@@ -1,4 +1,25 @@
-"use strict";function e(e){return e&&"object"==typeof e&&"default"in e?e.default:e}var r=require("commander"),s=e(require("ora")),o=require("webpack"),t=e(o),n=e(require("webpack-dev-server")),i=e(require("webpack-chain")),l=e(require("path")),a=e(require("fs")),u=e(require("mini-css-extract-plugin")),c=require("clean-webpack-plugin"),d=e(require("optimize-css-assets-webpack-plugin")),p=require("vue-loader"),v=require("webpack-bundle-analyzer"),m=e(require("html-webpack-plugin")),h=e(require("cssnano")),g=e(require("terser-webpack-plugin")),f=e(require("chalk"));function b(e){var r;return null===(r=Object.prototype.toString.call(e).match(/\s(\w*)]$/))||void 0===r?void 0:r[1].toLowerCase()}const y=e=>"array"===b(e),q=e=>"object"===b(e),w=e=>"map"===b(e),j=e=>"set"===b(e),k={mergeArray(e,r){e.splice(e.length,r.length,...r)},mergeSet(e,r){r.forEach(r=>e.add(r))},mergeMap(e,r){r.forEach((r,s)=>{y(r)?(!e.has(s)&&e.set(s,[]),this.mergeArray(e.get(s),r)):q(r)?(!e.has(s)&&e.set(s,{}),this.mergeObject(e.get(s),r)):w(r)?(!e.has(s)&&e.set(s,new Map),this.mergeMap(e.get(s),r)):j(r)?(!e.has(s)&&e.set(s,new Set),this.mergeSet(e.get(s),r)):e.set(s,r)})},mergeObject(e,r){var s,o,t,n;this.mergeArray;for(const i in r)if(Object.prototype.hasOwnProperty.call(r,i)){const l=r[i];y(l)?(null!==(s=e[i])&&void 0!==s||(e[i]=[]),this.mergeArray(e[i],l)):q(l)?(null!==(o=e[i])&&void 0!==o||(e[i]={}),this.mergeObject(e[i],l)):w(l)?(null!==(t=e[i])&&void 0!==t||(e[i]=new Map),this.mergeMap(e[i],l)):j(l)?(null!==(n=e[i])&&void 0!==n||(e[i]=new Set),this.mergeSet(e[i],l)):e[i]=l}}},O=(e,r)=>{if(b(e)!==b(r))throw new Error("[error]: 相同字段类型必须一致");y(r)?y(e)&&k.mergeArray(e,r):q(r)?q(e)&&k.mergeObject(e,r):w(r)?w(e)&&k.mergeMap(e,r):j(r)?j(e)&&k.mergeSet(e,r):e=r},S=function(e,...r){for(const s of r)O(e,s);return e};var x=e=>l.resolve(process.cwd(),""+e);var C=(e,r,s)=>{const o={},t=(()=>{var e;const r={},s=a.readFileSync(x("./package.json")).toString(),o=JSON.parse(s).dependencies;for(const s in o)Object.prototype.hasOwnProperty.call(o,s)&&(r[s]=null===(e=/\d+\.\d+\.\d+$/g.exec(o[s]))||void 0===e?void 0:e[0]);return r})(),n=e.map(e=>{if(e.name in t){const n=t[e.name];return o[e.name]=e.scope,{css:e.css&&[r,e.alias||e.name,n,e.css[s]].join("/"),js:e.js&&[r,e.alias||e.name,n,e.js[s]].join("/")}}throw new Error("相关依赖未安装，请先执行npm install "+e.name)});return{externals:o,htmlCdns:n}};const P=require("os").cpus().length>1,$={loader:require.resolve("eslint-loader"),options:{fix:!0}},E=(e,r)=>{const s={test:/\.(js)$/,use:[P?require.resolve("thread-loader"):"",{loader:require.resolve("babel-loader"),options:{cacheDirectory:!0,sourceType:"unambiguous"}}].filter(e=>e),include:[/src/]},o=[$];return"development"===e&&!1!==r&&s.use.push(...o),s},M=(e,r)=>{const s={test:/\.vue$/,use:[P?require.resolve("thread-loader"):"",require.resolve("vue-loader")].filter(e=>e),include:[/src/]},o=[$];return"development"===e&&!1!==r&&s.use.push(...o),s},A=(e,r)=>{const s={test:/\.css$/,oneOf:[{use:["production"===e?u.loader:require.resolve("vue-style-loader"),require.resolve("css-loader"),require.resolve("postcss-loader")]}]};return r&&s.oneOf.unshift({resourceQuery:/module/,use:["production"===e?u.loader:require.resolve("vue-style-loader"),{loader:require.resolve("css-loader"),options:{modules:!0}},require.resolve("postcss-loader")]}),s},z=(e,r)=>{const s={test:/\.less$/,use:["production"===e?u.loader:require.resolve("vue-style-loader"),require.resolve("css-loader"),require.resolve("postcss-loader"),{loader:require.resolve("less-loader"),options:{javascriptEnabled:!0}}]};return r&&r.length>0&&s.use.push({loader:require.resolve("sass-resources-loader"),options:{resources:r}}),s},D=(e,r)=>{const s={test:/\.s(a|c)ss$/,use:["production"===e?u.loader:require.resolve("vue-style-loader"),require.resolve("css-loader"),require.resolve("postcss-loader"),require.resolve("sass-loader")]};return r&&r.length>0&&s.use.push({loader:require.resolve("sass-resources-loader"),options:{resources:r}}),s},W=e=>{const r="production"===e?"[name][contenthash:8].[ext]":"[name].[ext]";return[{test:/\.(jpg|png|gif|jpeg|svg)$/i,use:[{loader:require.resolve("url-loader"),options:{limit:3072,name:"assets/images/"+r,esModule:!1}}]},{test:/\.(woff2|woff|eot|ttf|otf)$/i,loader:require.resolve("url-loader"),options:{name:"assets/fonts/"+r,esModule:!1}},{test:/\.(mp4|avi|mp3|rmvb|wmv|flv)$/i,loader:require.resolve("url-loader"),options:{name:"assets/media/"+r,esModule:!1}},{test:/\.(pdf|doc|docx|ppt|xls|xlsx)$/i,loader:require.resolve("url-loader"),options:{name:"assets/files/"+r,esModule:!1}}]},N=e=>{let r;return"development"===e&&(r=new o.HotModuleReplacementPlugin),r},T=e=>{let r;return"production"===e&&(r=new u({filename:"assets/style/[name][contenthash:8].css"})),r},_=e=>{let r;return"production"===e&&(r=new c.CleanWebpackPlugin),r},R=e=>{let r;return"production"===e&&(r=new d({assetNameRegExp:/\.css$/,cssProcessor:h,cssProcessorPluginOptions:{preset:["default",{discardComments:{removeAll:!0}}]}})),r},V=(e,r,s="./public/index.html",o="./public/favicon.ico")=>{let t={template:x(s),favicon:x(o),cdnConfig:r,inject:!r||r.length<=0};return"production"===e&&(t=Object.assign(Object.assign({},t),{minify:{caseSensitive:!1,collapseWhitespace:!0,removeAttributeQuotes:!0,removeComments:!0}})),new m(t)};function F(e,r){var s,o;const{analysis:t,css:n,cdn:i,eslintCompileCheck:l}=r,a=n.loaderOption;let u={},c=[];if(i){const r=C(i.sources,i.origin,e);u=r.externals,c=r.htmlCdns}return{entry:{main:"./src/main.js"},module:{rules:[A(e,n.module),...W(e),D(e,null===(s=a.scss)||void 0===s?void 0:s.prependData),M(e,l),E(e,l),z(e,null===(o=a.less)||void 0===o?void 0:o.prependData)]},plugins:[t?new v.BundleAnalyzerPlugin({analyzerPort:"auto"}):null,V(e,c),_(e),N(e),T(e),R(e),new p.VueLoaderPlugin].filter(e=>e),externals:u}}var H=(e,r)=>"development"===e?function(e,r){const s=F(e,r);return S(s,{output:{publicPath:"./",filename:"assets/[name].js",path:x("./dist")},mode:e,devtool:"cheap-module-eval-source-map",devServer:{hot:!0,inline:!0,open:!0,stats:"errors-warnings",compress:!0,historyApiFallback:!0,overlay:{errors:!0,warnings:!1}}})}(e,r):function(e,r){const s=F(e,r);return S(s,{output:{publicPath:"./",filename:"assets/[name][chunkhash:8].js",path:x("./dist")},mode:e,optimization:{minimize:!0,minimizer:[new g({cache:!0,parallel:!0,extractComments:!0,terserOptions:{compress:{unused:!0,drop_debugger:!0,drop_console:!0,dead_code:!0}}})],splitChunks:{chunks:"all",minSize:3e4,maxSize:0,minChunks:1,maxAsyncRequests:5,maxInitialRequests:3,automaticNameDelimiter:"~",name:!0,cacheGroups:{vendors:{test:/[\\/]node_modules[\\/]/,priority:-10},default:{minChunks:2,priority:-20,reuseExistingChunk:!0}}}}})}(e,r);const I={cdn:!1,configureWebpack:{},chainWebpack:e=>{},devServer:{},css:{module:!1,loaderOption:{scss:{prependData:[]},less:{prependData:[]}}},analysis:!1,eslintCompileCheck:!0};var J=(e,r)=>function(){var s;let o;try{o=require(process.cwd()+"/sli.config.js")}catch(e){o=I}const t=S(I,o),{configureWebpack:n,chainWebpack:l,devServer:a}=t,u=
+'use strict';
+
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var commander = require('commander');
+var ora = _interopDefault(require('ora'));
+var Webpack = require('webpack');
+var Webpack__default = _interopDefault(Webpack);
+var WebpackDevServer = _interopDefault(require('webpack-dev-server'));
+var WebpackChain = _interopDefault(require('webpack-chain'));
+var path = _interopDefault(require('path'));
+var fs = _interopDefault(require('fs'));
+var MiniCssExtractPlugin = _interopDefault(require('mini-css-extract-plugin'));
+var cleanWebpackPlugin = require('clean-webpack-plugin');
+var OptimizeCssAssetsWebpackPlugin = _interopDefault(require('optimize-css-assets-webpack-plugin'));
+var vueLoader = require('vue-loader');
+var webpackBundleAnalyzer = require('webpack-bundle-analyzer');
+var HtmlWebpackPlugin = _interopDefault(require('html-webpack-plugin'));
+var cssnano = _interopDefault(require('cssnano'));
+var TerserPlugin = _interopDefault(require('terser-webpack-plugin'));
+var chalk = _interopDefault(require('chalk'));
+
 /*! *****************************************************************************
 Copyright (c) Microsoft Corporation. All rights reserved.
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use
@@ -13,4 +34,696 @@ MERCHANTABLITY OR NON-INFRINGEMENT.
 See the Apache Version 2.0 License for specific language governing permissions
 and limitations under the License.
 ***************************************************************************** */
-function(e,r){var s={};for(var o in e)Object.prototype.hasOwnProperty.call(e,o)&&r.indexOf(o)<0&&(s[o]=e[o]);if(null!=e&&"function"==typeof Object.getOwnPropertySymbols){var t=0;for(o=Object.getOwnPropertySymbols(e);t<o.length;t++)r.indexOf(o[t])<0&&Object.prototype.propertyIsEnumerable.call(e,o[t])&&(s[o[t]]=e[o[t]])}return s}(t,["configureWebpack","chainWebpack","devServer"]),c=new i;l(c),r.port&&(a.port=r.port),r.analysis&&(u.analysis=r.analysis);const d=S(H(e,u),n,c.toConfig(),{devServer:a});return(null===(s=null==d?void 0:d.module)||void 0===s?void 0:s.rules)&&(d.module.rules=d.module.rules.reverse().reduce((e,r)=>(e.some(e=>{var s,o;return(null===(s=null==e?void 0:e.test)||void 0===s?void 0:s.toString())===(null===(o=null==r?void 0:r.test)||void 0===o?void 0:o.toString())})||e.push(r),e),[]).reverse()),d}();const L=new r.Command;L.command("dev").description("run your app in development").alias("d").option("-p, --port <port>","Port used by the server (default: 8080)").action(e=>{(e=>{var r,o;const i=s();i.start("app is starting..."),process.env.NODE_ENV="development";const l=J("development",{port:e}),a=t(l);e=(null===(r=l.devServer)||void 0===r?void 0:r.port)||8080;const u=(null===(o=l.devServer)||void 0===o?void 0:o.host)||"localhost";a.hooks.done.tap("buildTip",()=>{i.succeed(`compile successfully!\n      please open  http://${u}:${e}`)}),a.hooks.failed.tap("buildTip",e=>{i.fail("compile failed"),console.log(e)}),new n(a,l.devServer||{}).listen(e,u)})(e.port)}),L.command("build").description("build your app (production)").alias("b").option("-a, --analysis","show buldle information").action(e=>{(e=>{const r=s();r.start("app is building..."),process.env.NODE_ENV="production";const o=J("production",{analysis:e}),n=t(o);n.hooks.done.tap("buildTip",()=>{r.succeed("build successfully!")}),n.hooks.failed.tap("buildTip",e=>{r.fail("build failed"),console.log(e)}),n.run((e,r)=>{const s=r.toJson();console.log([f.green(`Time: ${s.time}ms`),f.green("webpack version: "+s.version)].join("\n"))})})(e.analysis)}),L.version(require("../package.json").version,"-v --version").parse(process.argv),process.argv.slice(2).length||L.outputHelp();
+
+function __rest(s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+}
+
+/**
+ * * 获取变量类型
+ */
+/**
+ * @description 获取变量类型
+ * @author fanzhongxu
+ * @param {any} variable 变量
+ * @returns 类型
+ */
+function getTypeof (variable) {
+    var _a;
+    const result = (_a = Object.prototype.toString
+        .call(variable)
+        .match(/\s(\w*)]$/)) === null || _a === void 0 ? void 0 : _a[1].toLowerCase();
+    return result; // eslint-disable-line
+}
+
+/**
+ * * 深合并
+ * * 对象、map对应key合并
+ * * 数组、set，=> concat
+ */
+const isArray = (p) => {
+    return getTypeof(p) === 'array';
+};
+const isObject = (p) => {
+    return getTypeof(p) === 'object';
+};
+const isMap = (p) => {
+    return getTypeof(p) === 'map';
+};
+const isSet = (p) => {
+    return getTypeof(p) === 'set';
+};
+const merger = {
+    mergeArray(a, b) {
+        a.splice(a.length, b.length, ...b);
+    },
+    mergeSet(a, b) {
+        b.forEach(e => a.add(e));
+    },
+    mergeMap(a, b) {
+        b.forEach((value, key) => {
+            if (isArray(value)) {
+                !a.has(key) && a.set(key, []);
+                this.mergeArray(a.get(key), value);
+            }
+            else if (isObject(value)) {
+                !a.has(key) && a.set(key, {});
+                this.mergeObject(a.get(key), value);
+            }
+            else if (isMap(value)) {
+                !a.has(key) && a.set(key, new Map());
+                this.mergeMap(a.get(key), value);
+            }
+            else if (isSet(value)) {
+                !a.has(key) && a.set(key, new Set());
+                this.mergeSet(a.get(key), value);
+            }
+            else {
+                a.set(key, value);
+            }
+        });
+    },
+    mergeObject(a, b) {
+        var _a, _b, _c, _d;
+        this['mergeArray'];
+        for (const key in b) {
+            if (Object.prototype.hasOwnProperty.call(b, key)) {
+                const value = b[key];
+                if (isArray(value)) {
+                    (_a = a[key]) !== null && _a !== void 0 ? _a : (a[key] = []);
+                    this.mergeArray(a[key], value);
+                }
+                else if (isObject(value)) {
+                    (_b = a[key]) !== null && _b !== void 0 ? _b : (a[key] = {});
+                    this.mergeObject(a[key], value);
+                }
+                else if (isMap(value)) {
+                    (_c = a[key]) !== null && _c !== void 0 ? _c : (a[key] = new Map());
+                    this.mergeMap(a[key], value);
+                }
+                else if (isSet(value)) {
+                    (_d = a[key]) !== null && _d !== void 0 ? _d : (a[key] = new Set());
+                    this.mergeSet(a[key], value);
+                }
+                else {
+                    a[key] = value;
+                }
+            }
+        }
+    },
+};
+const mergeElement = (target, element) => {
+    if (getTypeof(target) !== getTypeof(element)) {
+        throw new Error('[error]: 相同字段类型必须一致');
+    }
+    else if (isArray(element)) {
+        isArray(target) && merger.mergeArray(target, element);
+    }
+    else if (isObject(element)) {
+        isObject(target) && merger.mergeObject(target, element);
+    }
+    else if (isMap(element)) {
+        isMap(target) && merger.mergeMap(target, element);
+    }
+    else if (isSet(element)) {
+        isSet(target) && merger.mergeSet(target, element);
+    }
+    else {
+        target = element;
+    }
+};
+/**
+ * @description 深合并算法
+ * @param {T} target 目标对象
+ * @param {...T[]} args 待合并对象
+ * @returns {T} 合并结果
+ */
+const deepMerge = function (target, ...args) {
+    for (const element of args)
+        mergeElement(target, element);
+    return target;
+};
+
+var absolute = (relative) => path.resolve(process.cwd(), `${relative}`);
+
+/**
+ ** CDN
+ */
+// 获取所有依赖及其版本号
+const getModulesVersion = () => {
+    var _a;
+    const mvs = {};
+    const data = fs.readFileSync(absolute('./package.json')).toString();
+    const json = JSON.parse(data);
+    const dependencies = json.dependencies;
+    for (const m in dependencies) {
+        if (Object.prototype.hasOwnProperty.call(dependencies, m)) {
+            mvs[m] = (_a = /\d+\.\d+\.\d+$/g.exec(dependencies[m])) === null || _a === void 0 ? void 0 : _a[0];
+        }
+    }
+    return mvs;
+};
+// 处理externalConfig，并返回externals
+var genCdn = (config, orign, mode) => {
+    const externals = {}; // 结果
+    const dependencieModules = getModulesVersion(); // 获取全部的模块和版本号
+    const htmlCdns = config.map(item => {
+        if (item.name in dependencieModules) {
+            const version = dependencieModules[item.name];
+            // 拼接css 和 js 完整链接
+            externals[item.name] = item.scope;
+            return {
+                css: item.css &&
+                    [orign, item.alias || item.name, version, item.css[mode]].join('/'),
+                js: item.js &&
+                    [orign, item.alias || item.name, version, item.js[mode]].join('/'),
+            };
+        }
+        else {
+            throw new Error('相关依赖未安装，请先执行npm install ' + item.name);
+        }
+    });
+    return { externals, htmlCdns };
+};
+
+// const { absolute } = require('../utils')
+const isMultiCpu = require('os').cpus().length > 1;
+/**
+ ** loader
+ */
+const eslintLoader = {
+    loader: require.resolve('eslint-loader'),
+    options: {
+        fix: true,
+    },
+};
+const genJsLoader = (mode, eslintCompileCheck) => {
+    const options = {
+        test: /\.(js)$/,
+        use: [
+            isMultiCpu ? require.resolve('thread-loader') : '',
+            {
+                loader: require.resolve('babel-loader'),
+                options: { cacheDirectory: true, sourceType: 'unambiguous' },
+            },
+        ].filter(item => item),
+        include: [/src/],
+    };
+    const devOptions = [eslintLoader];
+    // 启用eslint-loader
+    const isCheck = eslintCompileCheck !== false;
+    if (mode === 'development' && isCheck)
+        options.use.push(...devOptions);
+    return options;
+};
+const genVueLoader = (mode, eslintCompileCheck) => {
+    const options = {
+        test: /\.vue$/,
+        use: [
+            isMultiCpu ? require.resolve('thread-loader') : '',
+            require.resolve('vue-loader'),
+        ].filter(item => item),
+        include: [/src/],
+    };
+    const devOptions = [eslintLoader];
+    // 开发环境启用eslint-loader
+    const isCheck = eslintCompileCheck !== false;
+    if (mode === 'development' && isCheck)
+        options.use.push(...devOptions);
+    return options;
+};
+const genCssLoader = (mode, module) => {
+    const result = {
+        test: /\.css$/,
+        oneOf: [
+            // 这里匹配普通的 `<style>` 或 `<style scoped>`
+            {
+                use: [
+                    mode === 'production'
+                        ? MiniCssExtractPlugin.loader
+                        : require.resolve('vue-style-loader'),
+                    require.resolve('css-loader'),
+                    require.resolve('postcss-loader'),
+                ],
+            },
+        ],
+    };
+    //  开启css-module
+    if (module) {
+        result.oneOf.unshift(
+        // 这里匹配 `<style module>`
+        {
+            resourceQuery: /module/,
+            use: [
+                mode === 'production'
+                    ? MiniCssExtractPlugin.loader
+                    : require.resolve('vue-style-loader'),
+                {
+                    loader: require.resolve('css-loader'),
+                    options: {
+                        modules: true,
+                    },
+                },
+                require.resolve('postcss-loader'),
+            ],
+        });
+    }
+    return result;
+};
+const genLessLoader = (mode, prependData) => {
+    const result = {
+        test: /\.less$/,
+        use: [
+            mode === 'production'
+                ? MiniCssExtractPlugin.loader
+                : require.resolve('vue-style-loader'),
+            require.resolve('css-loader'),
+            require.resolve('postcss-loader'),
+            {
+                loader: require.resolve('less-loader'),
+                options: {
+                    javascriptEnabled: true,
+                },
+            },
+        ],
+    };
+    if (prependData && prependData.length > 0) {
+        result.use.push({
+            loader: require.resolve('sass-resources-loader'),
+            options: {
+                resources: prependData,
+            },
+        });
+    }
+    return result;
+};
+const genSassLoader = (mode, prependData) => {
+    const result = {
+        test: /\.s(a|c)ss$/,
+        use: [
+            mode === 'production'
+                ? MiniCssExtractPlugin.loader
+                : require.resolve('vue-style-loader'),
+            require.resolve('css-loader'),
+            require.resolve('postcss-loader'),
+            require.resolve('sass-loader'),
+        ],
+    };
+    if (prependData && prependData.length > 0) {
+        result.use.push({
+            loader: require.resolve('sass-resources-loader'),
+            options: {
+                resources: prependData,
+            },
+        });
+    }
+    return result;
+};
+const genStaticsLoader = (mode) => {
+    const name = mode === 'production' ? '[name][contenthash:8].[ext]' : '[name].[ext]';
+    // 图片资源解析器
+    const imgResolver = {
+        test: /\.(jpg|png|gif|jpeg|svg)$/i,
+        use: [
+            {
+                loader: require.resolve('url-loader'),
+                options: {
+                    limit: 3 * 1024,
+                    name: `assets/images/${name}`,
+                    esModule: false,
+                },
+            },
+        ],
+    };
+    // 字体资源解析器
+    const fontResolver = {
+        test: /\.(woff2|woff|eot|ttf|otf)$/i,
+        loader: require.resolve('url-loader'),
+        options: {
+            name: `assets/fonts/${name}`,
+            esModule: false,
+        },
+    };
+    // 视频&音频资源解析器
+    const mediaResolver = {
+        test: /\.(mp4|avi|mp3|rmvb|wmv|flv)$/i,
+        loader: require.resolve('url-loader'),
+        options: {
+            name: `assets/media/${name}`,
+            esModule: false,
+        },
+    };
+    const fileResolver = {
+        test: /\.(pdf|doc|docx|ppt|xls|xlsx)$/i,
+        loader: require.resolve('url-loader'),
+        options: {
+            name: `assets/files/${name}`,
+            esModule: false,
+        },
+    };
+    return [imgResolver, fontResolver, mediaResolver, fileResolver];
+};
+
+/**
+ ** plugins
+ */
+const genVueLoaderPlugin = () => {
+    return new vueLoader.VueLoaderPlugin();
+};
+// only production
+// const genModuleConcatenationPlugin = ():
+//   | optimize.ModuleConcatenationPlugin
+//   | undefined => {
+//   let plugin;
+//   if (mode === 'production') plugin = new optimize.ModuleConcatenationPlugin();
+//   return plugin;
+// };
+// only development
+const genHotModuleReplacementPlugin = (mode) => {
+    let plugin;
+    if (mode === 'development')
+        plugin = new Webpack.HotModuleReplacementPlugin();
+    return plugin;
+};
+// only production
+const genMiniCssExtractPlugin = (mode) => {
+    let plugin;
+    if (mode === 'production') {
+        plugin = new MiniCssExtractPlugin({
+            filename: 'assets/style/[name][contenthash:8].css',
+        });
+    }
+    return plugin;
+};
+// only production
+const genCleanWebpackPlugin = (mode) => {
+    let plugin;
+    if (mode === 'production')
+        plugin = new cleanWebpackPlugin.CleanWebpackPlugin();
+    return plugin;
+};
+// only production
+const genOptimizeCssAssetsWebpackPlugin = (mode) => {
+    let plugin;
+    if (mode === 'production') {
+        plugin = new OptimizeCssAssetsWebpackPlugin({
+            assetNameRegExp: /\.css$/,
+            cssProcessor: cssnano,
+            cssProcessorPluginOptions: {
+                preset: ['default', { discardComments: { removeAll: true } }],
+            },
+        });
+    }
+    return plugin;
+};
+// only production
+const genBundleAnalyzerPlugin = () => {
+    return new webpackBundleAnalyzer.BundleAnalyzerPlugin({
+        analyzerPort: 'auto',
+    });
+};
+const genHtmlWebpackPlugin = (mode, externalConfig, template = './public/index.html', favicon = './public/favicon.ico') => {
+    let options = {
+        template: absolute(template),
+        favicon: absolute(favicon),
+        cdnConfig: externalConfig,
+        inject: !externalConfig || externalConfig.length <= 0,
+    };
+    const prodOptions = {
+        minify: {
+            caseSensitive: false,
+            collapseWhitespace: true,
+            removeAttributeQuotes: true,
+            removeComments: true,
+        },
+    };
+    if (mode === 'production')
+        options = Object.assign(Object.assign({}, options), prodOptions);
+    return new HtmlWebpackPlugin(options);
+};
+
+/* eslint-disable @typescript-eslint/camelcase */
+const genTerserPlugin = () => new TerserPlugin({
+    cache: true,
+    parallel: true,
+    extractComments: true,
+    terserOptions: {
+        compress: {
+            unused: true,
+            drop_debugger: true,
+            drop_console: true,
+            dead_code: true,
+        },
+    },
+});
+
+function genCommon(mode, options) {
+    // option - analysis cdn css
+    var _a, _b;
+    const { analysis, css, cdn, eslintCompileCheck } = options;
+    const loaderOption = css.loaderOption;
+    // * 处理cdn
+    let externals = {};
+    let htmlCdns = [];
+    if (cdn) {
+        const cdnOption = genCdn(cdn.sources, cdn.origin, mode);
+        externals = cdnOption.externals;
+        htmlCdns = cdnOption.htmlCdns;
+    }
+    return {
+        entry: {
+            main: './src/main.js',
+        },
+        module: {
+            rules: [
+                genCssLoader(mode, css.module),
+                ...genStaticsLoader(mode),
+                genSassLoader(mode, (_a = loaderOption['scss']) === null || _a === void 0 ? void 0 : _a.prependData),
+                genVueLoader(mode, eslintCompileCheck),
+                genJsLoader(mode, eslintCompileCheck),
+                genLessLoader(mode, (_b = loaderOption['less']) === null || _b === void 0 ? void 0 : _b.prependData),
+            ],
+        },
+        plugins: [
+            analysis ? genBundleAnalyzerPlugin() : null,
+            genHtmlWebpackPlugin(mode, htmlCdns),
+            genCleanWebpackPlugin(mode),
+            genHotModuleReplacementPlugin(mode),
+            genMiniCssExtractPlugin(mode),
+            genOptimizeCssAssetsWebpackPlugin(mode),
+            genVueLoaderPlugin(),
+        ].filter(item => item),
+        externals,
+    };
+}
+function genDev(mode, options) {
+    const common = genCommon(mode, options);
+    return deepMerge(common, {
+        output: {
+            publicPath: './',
+            filename: 'assets/[name].js',
+            path: absolute('./dist'),
+        },
+        mode,
+        devtool: 'cheap-module-eval-source-map',
+        devServer: {
+            hot: true,
+            inline: true,
+            open: true,
+            stats: 'errors-warnings',
+            compress: true,
+            // contentBase: path.resolve(__dirname, './dist'),
+            historyApiFallback: true,
+            overlay: {
+                // 浏览器全屏显示错误
+                errors: true,
+                warnings: false,
+            },
+        },
+    });
+}
+function genProd(mode, options) {
+    const common = genCommon(mode, options);
+    return deepMerge(common, {
+        output: {
+            publicPath: './',
+            filename: 'assets/[name][chunkhash:8].js',
+            path: absolute('./dist'),
+        },
+        mode,
+        optimization: {
+            minimize: true,
+            minimizer: [genTerserPlugin()],
+            splitChunks: {
+                chunks: 'all',
+                minSize: 30000,
+                maxSize: 0,
+                minChunks: 1,
+                maxAsyncRequests: 5,
+                maxInitialRequests: 3,
+                automaticNameDelimiter: '~',
+                name: true,
+                cacheGroups: {
+                    vendors: {
+                        test: /[\\/]node_modules[\\/]/,
+                        priority: -10,
+                    },
+                    default: {
+                        minChunks: 2,
+                        priority: -20,
+                        reuseExistingChunk: true,
+                    },
+                },
+            },
+        },
+    });
+}
+var genWebpackConfig = (mode, option) => {
+    return mode === 'development' ? genDev(mode, option) : genProd(mode, option);
+};
+
+const defaultCliConfig = {
+    cdn: false,
+    configureWebpack: {},
+    chainWebpack: (config) => { },
+    devServer: {},
+    css: {
+        module: false,
+        loaderOption: {
+            scss: {
+                prependData: [],
+            },
+            less: {
+                prependData: [],
+            },
+        },
+    },
+    analysis: false,
+    eslintCompileCheck: false,
+};
+var getCliConfig = (mode, options) => {
+    function getConfig() {
+        var _a;
+        let { cliConfig } = options;
+        try {
+            cliConfig = cliConfig || require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
+        }
+        catch (e) {
+            cliConfig = defaultCliConfig;
+        }
+        const _b = deepMerge(defaultCliConfig, cliConfig), { configureWebpack, chainWebpack, devServer } = _b, args = __rest(_b, ["configureWebpack", "chainWebpack", "devServer"]);
+        const chainConfig = new WebpackChain();
+        chainWebpack(chainConfig);
+        if (options.port)
+            devServer.port = options.port;
+        if (options.analysis)
+            args.analysis = options.analysis;
+        const config = deepMerge(genWebpackConfig(mode, args), configureWebpack, chainConfig.toConfig(), {
+            devServer,
+        });
+        // 去除重复loader
+        if ((_a = config === null || config === void 0 ? void 0 : config.module) === null || _a === void 0 ? void 0 : _a.rules) {
+            config.module.rules = config.module.rules
+                .reverse()
+                .reduce((rules, rule) => {
+                const isExist = rules.some(item => { var _a, _b; return ((_a = item === null || item === void 0 ? void 0 : item.test) === null || _a === void 0 ? void 0 : _a.toString()) === ((_b = rule === null || rule === void 0 ? void 0 : rule.test) === null || _b === void 0 ? void 0 : _b.toString()); });
+                if (!isExist) {
+                    rules.push(rule);
+                }
+                return rules;
+            }, [])
+                .reverse();
+        }
+        return config;
+    }
+    return getConfig();
+};
+
+var dev = (option) => {
+    var _a, _b;
+    let port = option.port;
+    const { cliConfig } = option;
+    const loading = ora();
+    loading.start('app is starting...');
+    // set enviroment
+    process.env.NODE_ENV = 'development';
+    const config = getCliConfig('development', { port, cliConfig });
+    const compiler = Webpack__default(config);
+    port = ((_a = config.devServer) === null || _a === void 0 ? void 0 : _a.port) || 8080;
+    const host = ((_b = config.devServer) === null || _b === void 0 ? void 0 : _b.host) || 'localhost';
+    compiler.hooks.done.tap('buildTip', () => {
+        loading.succeed(`compile successfully!
+      please open  http://${host}:${port}`);
+    });
+    compiler.hooks.failed.tap('buildTip', err => {
+        loading.fail('compile failed');
+        console.log(err);
+    });
+    new WebpackDevServer(compiler, config.devServer || {}).listen(port, host);
+};
+
+var build = (option) => {
+    const { analysis, cliConfig } = option;
+    const loading = ora();
+    loading.start('app is building...');
+    // set enviroment
+    process.env.NODE_ENV = 'production';
+    const config = getCliConfig('production', { analysis, cliConfig });
+    const compiler = Webpack__default(config);
+    compiler.hooks.done.tap('buildTip', () => {
+        loading.succeed('build successfully!');
+    });
+    compiler.hooks.failed.tap('buildTip', err => {
+        loading.fail('build failed');
+        console.log(err);
+    });
+    compiler.run((err, stats) => {
+        const result = stats.toJson();
+        console.log([
+            chalk.green(`Time: ${result.time}ms`),
+            chalk.green(`webpack version: ${result.version}`),
+        ].join('\n'));
+    });
+};
+
+const program = new commander.Command();
+program
+    .command('dev')
+    .description('run your app in development')
+    .alias('d')
+    .option('-p, --port <port>', 'Port used by the server (default: 8080)')
+    .action(cmdObj => {
+    dev({
+        port: cmdObj.port,
+    });
+});
+program
+    .command('build')
+    .description('build your app (production)')
+    .alias('b')
+    .option('-a, --analysis', 'show buldle information')
+    .action(cmdObj => {
+    build({
+        analysis: cmdObj.analysis,
+    });
+});
+program
+    .version(require('../package.json').version, '-v --version')
+    .parse(process.argv);
+// show help info when no params
+if (!process.argv.slice(2).length)
+    program.outputHelp();
+var index = {
+    build,
+    dev,
+};
+
+module.exports = index;

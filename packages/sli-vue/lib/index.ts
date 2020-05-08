@@ -10,7 +10,9 @@ program
   .alias('d')
   .option('-p, --port <port>', 'Port used by the server (default: 8080)')
   .action(cmdObj => {
-    dev(cmdObj.port);
+    dev({
+      port: cmdObj.port,
+    });
   });
 program
   .command('build')
@@ -18,7 +20,9 @@ program
   .alias('b')
   .option('-a, --analysis', 'show buldle information')
   .action(cmdObj => {
-    build(cmdObj.analysis);
+    build({
+      analysis: cmdObj.analysis,
+    });
   });
 
 program
@@ -27,3 +31,8 @@ program
 
 // show help info when no params
 if (!process.argv.slice(2).length) program.outputHelp();
+
+export default {
+  build,
+  dev,
+};

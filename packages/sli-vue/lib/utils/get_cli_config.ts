@@ -7,32 +7,9 @@ import deepMerge from './deep_merge';
 
 const defaultCliConfig: sliConfiguration = {
   cdn: false,
-  /**
-   * * property: configureWebpack
-   * * type: object | function
-   * * 这会直接merge到最终webpack配置
-   */
   configureWebpack: {}, // 这会直接merge到最终webpack配置
-
-  /**
-   * * property: chainWebpack
-   * * type: function
-   * * 是一个函数，会接收一个基于 webpack-chain 的 ChainableConfig 实例。允许对内部的 webpack 配置进行更细粒度的修改。
-   */
   chainWebpack: (config: WebpackChain): void => {}, // eslint-disable-line
-
-  /**
-   * * property: devServer
-   * * type: object
-   * * 会传递给webpack-dev-server
-   */
   devServer: {},
-
-  /**
-   * * property: css
-   * * type: object
-   * * 与css相关的配置
-   */
   css: {
     module: false,
     loaderOption: {
@@ -44,24 +21,14 @@ const defaultCliConfig: sliConfiguration = {
       },
     },
   },
-  /**
-   * * property: analysis
-   * * type: boolean
-   * * 若为tru， 打包时会启用BundleAnalyzerPlugin
-   */
   analysis: false,
-
-  /**
-   * * property: eslintCompileCheck
-   * * type: boolean
-   * * 是否开启eslint编译时检查（项目需要安装eslint）
-   */
-  eslintCompileCheck: true,
+  eslintCompileCheck: false,
 };
 
 interface Options {
   port?: number;
   analysis?: boolean;
+  cliConfig?: sliConfiguration;
 }
 
 export default (
@@ -69,9 +36,9 @@ export default (
   options: Options
 ): Configuration => {
   function getConfig(): Configuration {
-    let cliConfig: sliConfiguration;
+    let { cliConfig } = options;
     try {
-      cliConfig = require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
+      cliConfig = cliConfig || require(`${process.cwd()}/sli.config.js`); // eslint-disable-line
     } catch (e) {
       cliConfig = defaultCliConfig;
     }

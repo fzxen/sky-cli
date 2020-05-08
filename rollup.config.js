@@ -21,7 +21,7 @@ const root = pathMap[project];
 const inputOptions = {
   input: absolute(`${root}/lib/index.ts`),
   external: ['ms'],
-  plugins: [ts(), commonjs(), json(), terser()],
+  plugins: [ts(), commonjs(), json()],
 };
 const outputOptions = {
   file: absolute(`${root}/dist/index.js`),

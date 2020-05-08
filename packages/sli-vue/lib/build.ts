@@ -3,15 +3,20 @@ import Webpack from 'webpack';
 import chalk from 'chalk';
 
 import getCliConfig from './utils/get_cli_config';
+import sliConfiguration from './interface/sli_configuration';
 
-export default (analysis: boolean): void => {
+export default (option: {
+  analysis: boolean;
+  cliConfig?: sliConfiguration;
+}): void => {
+  const { analysis, cliConfig } = option;
   const loading = ora();
   loading.start('app is building...');
 
   // set enviroment
   process.env.NODE_ENV = 'production';
 
-  const config = getCliConfig('production', { analysis });
+  const config = getCliConfig('production', { analysis, cliConfig });
 
   const compiler = Webpack(config);
 
