@@ -12,10 +12,10 @@ import QueryOptions from '../interface/create_query_options';
 import depVersions from '../enums/dependencies';
 
 export const createCliConfig = async (path: string): Promise<void> =>
-  copyFileSync(resolve(__dirname, '../sources/sli.config.js'), path);
+  copyFileSync(resolve(__dirname, './sources/sli.config.js'), path);
 
 export const createCommitlintrc = (path: string): void =>
-  copyFile(resolve(__dirname, '../sources/.commitlintrc.js'), path, err => {
+  copyFile(resolve(__dirname, './sources/.commitlintrc.js'), path, err => {
     if (err) throw new Error('.commitlintrc.js failed to create');
   });
 
@@ -39,14 +39,14 @@ const updateVue = (options: QueryOptions, json: Packages): Packages => {
     json.devDependencies['standard'] = depVersions['standard'];
     json.devDependencies['babel-eslint'] = depVersions['babel-eslint'];
     copyFile(
-      resolve(__dirname, '../sources/vue/.eslintrc.js'),
+      resolve(__dirname, './sources/vue/.eslintrc.js'),
       `${name}/.eslintrc.js`,
       err => {
         if (err) throw new Error('.eslintrc.js failed to create');
       }
     );
     copyFile(
-      resolve(__dirname, '../sources/vue/.eslintignore'),
+      resolve(__dirname, './sources/vue/.eslintignore'),
       `${name}/.eslintignore`,
       err => {
         if (err) throw new Error('.elsintignore failed to create');
@@ -55,7 +55,7 @@ const updateVue = (options: QueryOptions, json: Packages): Packages => {
   }
 
   // 修改 sli-vue版本
-  json.devDependencies['@poloris/sli-vue'] = depVersions['@poloris/sli-vue'];
+  json.devDependencies['@redcoast/sli-vue'] = depVersions['@redcoast/sli-vue'];
 
   return json;
 };

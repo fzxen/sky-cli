@@ -1,11 +1,9 @@
 {
-  "name": "@poloris/sky-cli",
-  "version": "0.2.1",
+  "name": "@redcoast/sli",
+  "version": "0.1.0",
   "description": "",
-  "main": "./dist/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+  "main": "index.js",
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zxffan/sky-cli.git"
@@ -15,8 +13,8 @@
   "author": "zxffan",
   "license": "ISC",
   "bin": {
-    "sky-cli": "./bin/cmd",
-    "sli": "./bin/cmd"
+    "sky-cli": "./bin/cmd.js",
+    "sli": "./bin/cmd.js"
   },
   "dependencies": {
     "chalk": "^4.0.0",

@@ -1,8 +1,8 @@
 {
-  "name": "@poloris/sli-vue",
-  "version": "0.2.2",
+  "name": "@redcoast/sli-vue",
+  "version": "0.1.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "index.js",
   "scripts": {},
   "keywords": [],
   "repository": {
@@ -13,8 +13,8 @@
   "author": "zxffan",
   "license": "ISC",
   "bin": {
-    "sky-cli-vue": "./bin/cmd",
-    "sli-vue": "./bin/cmd"
+    "sky-cli-vue": "./bin/cmd.js",
+    "sli-vue": "./bin/cmd.js"
   },
   "dependencies": {
     "babel-loader": "^8.1.0",

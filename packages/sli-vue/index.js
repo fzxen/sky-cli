@@ -528,7 +528,7 @@ function genDev(mode, options) {
     const common = genCommon(mode, options);
     return deepMerge(common, {
         output: {
-            publicPath: './',
+            publicPath: '/',
             filename: 'assets/[name].js',
             path: absolute('./dist'),
         },
@@ -554,7 +554,7 @@ function genProd(mode, options) {
     const common = genCommon(mode, options);
     return deepMerge(common, {
         output: {
-            publicPath: './',
+            publicPath: '/',
             filename: 'assets/[name][chunkhash:8].js',
             path: absolute('./dist'),
         },
@@ -653,7 +653,7 @@ var dev = (option) => {
     const { cliConfig } = option;
     const loading = ora();
     loading.start('app is starting...');
-    // set enviroment
+    // set env
     process.env.NODE_ENV = 'development';
     const config = getCliConfig('development', { port, cliConfig });
     const compiler = Webpack__default(config);
@@ -694,34 +694,37 @@ var build = (option) => {
     });
 };
 
-const program = new commander.Command();
-program
-    .command('dev')
-    .description('run your app in development')
-    .alias('d')
-    .option('-p, --port <port>', 'Port used by the server (default: 8080)')
-    .action(cmdObj => {
-    dev({
-        port: cmdObj.port,
+function install() {
+    const program = new commander.Command();
+    program
+        .command('dev')
+        .description('run your app in development')
+        .alias('d')
+        .option('-p, --port <port>', 'Port used by the server (default: 8080)')
+        .action(cmdObj => {
+        dev({
+            port: cmdObj.port,
+        });
     });
-});
-program
-    .command('build')
-    .description('build your app (production)')
-    .alias('b')
-    .option('-a, --analysis', 'show buldle information')
-    .action(cmdObj => {
-    build({
-        analysis: cmdObj.analysis,
+    program
+        .command('build')
+        .description('build your app (production)')
+        .alias('b')
+        .option('-a, --analysis', 'show bundle information')
+        .action(cmdObj => {
+        build({
+            analysis: cmdObj.analysis,
+        });
     });
-});
-program
-    .version(require('../package.json').version, '-v --version')
-    .parse(process.argv);
-// show help info when no params
-if (!process.argv.slice(2).length)
-    program.outputHelp();
+    program
+        .version(require('./package.json').version, '-v --version')
+        .parse(process.argv);
+    // show help info when no params
+    if (!process.argv.slice(2).length)
+        program.outputHelp();
+}
 var index = {
+    install,
     build,
     dev,
 };

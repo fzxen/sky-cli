@@ -36,7 +36,7 @@ program
 //   });
 
 program
-  .version(require('../package.json').version, '-v --version')
+  .version(require('./package.json').version, '-v --version')
   .parse(process.argv);
 
 // show help info when no params

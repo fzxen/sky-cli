@@ -24,7 +24,7 @@ const inputOptions = {
   plugins: [ts(), commonjs(), json()],
 };
 const outputOptions = {
-  file: absolute(`${root}/dist/index.js`),
+  file: absolute(`${root}/index.js`),
   format: 'cjs',
 };
 
