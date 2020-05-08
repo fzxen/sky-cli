@@ -105,7 +105,7 @@ export const genHtmlWebpackPlugin = (
     template: absolute(template),
     favicon: absolute(favicon),
     cdnConfig: externalConfig, // cdn配置
-    inject: !externalConfig,
+    inject: !externalConfig || externalConfig.length <= 0,
   };
 
   const prodOptions = {
