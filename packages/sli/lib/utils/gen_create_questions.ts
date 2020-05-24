@@ -1,6 +1,6 @@
 import { QuestionCollection, Answers } from 'inquirer';
 
-const genQuestions = (name: string): QuestionCollection<Answers> => {
+export const genFrameQuestions = (): QuestionCollection<Answers> => {
   return [
     {
       type: 'list',
@@ -8,6 +8,11 @@ const genQuestions = (name: string): QuestionCollection<Answers> => {
       message: 'please choose this project template',
       choices: ['vue', 'react', 'electron'],
     },
+  ];
+};
+
+export const genVueQuestions = (name: string): QuestionCollection<Answers> => {
+  return [
     {
       type: 'input',
       name: 'name',
@@ -60,5 +65,41 @@ const genQuestions = (name: string): QuestionCollection<Answers> => {
     },
   ];
 };
+export const genElectronQuestions = (
+  name: string
+): QuestionCollection<Answers> => {
+  return [
+    {
+      type: 'input',
+      name: 'name',
+      message: 'Please enter the project name: ',
+      default: name,
+      validate(value: string): boolean | string {
+        if (!value) return 'you must provide the name';
 
-export default genQuestions;
+        return true;
+      },
+    },
+    {
+      type: 'input',
+      name: 'description',
+      message: 'Please enter the project description: ',
+      validate(value: string): boolean | string {
+        if (!value) return 'you must provide the description';
+
+        return true;
+      },
+    },
+    {
+      type: 'input',
+      name: 'author',
+      message: 'Please enter the author name: ',
+      default: 'fanzhongxu',
+      validate(value: string): boolean | string {
+        if (!value) return 'you must provide the author';
+
+        return true;
+      },
+    },
+  ];
+};

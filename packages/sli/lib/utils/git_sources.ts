@@ -6,7 +6,7 @@ const gitSources = {
     url: '',
   },
   electron: {
-    url: '',
+    url: 'direct:https://gitee.com/zxffan/templates.git#electron',
   },
 };
 

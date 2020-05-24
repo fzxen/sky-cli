@@ -5,11 +5,11 @@ function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'defau
 var commander = require('commander');
 var symbol = _interopDefault(require('log-symbols'));
 var chalk = _interopDefault(require('chalk'));
-var ora = _interopDefault(require('ora'));
 var inquirer = _interopDefault(require('inquirer'));
-var downloadGit = _interopDefault(require('download-git-repo'));
 var fs = require('fs');
 var path = require('path');
+var downloadGit = _interopDefault(require('download-git-repo'));
+var ora = _interopDefault(require('ora'));
 var child_process = require('child_process');
 
 var isNone = (obj) => obj === undefined || obj === null;
@@ -25,16 +25,105 @@ const isFoldExist = (name) => {
     });
 };
 
-const gitSources = {
-    vue: {
-        url: 'direct:https://gitee.com/zxffan/templates.git#vue-spa',
-    },
-    react: {
-        url: '',
-    },
-    electron: {
-        url: '',
-    },
+const genFrameQuestions = () => {
+    return [
+        {
+            type: 'list',
+            name: 'frame',
+            message: 'please choose this project template',
+            choices: ['vue', 'react', 'electron'],
+        },
+    ];
+};
+const genVueQuestions = (name) => {
+    return [
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Please enter the project name: ',
+            default: name,
+            validate(value) {
+                if (!value)
+                    return 'you must provide the name';
+                return true;
+            },
+        },
+        {
+            type: 'input',
+            name: 'description',
+            message: 'Please enter the project description: ',
+            validate(value) {
+                if (!value)
+                    return 'you must provide the description';
+                return true;
+            },
+        },
+        {
+            type: 'input',
+            name: 'author',
+            message: 'Please enter the author name: ',
+            default: 'fanzhongxu',
+            validate(value) {
+                if (!value)
+                    return 'you must provide the author';
+                return true;
+            },
+        },
+        {
+            type: 'confirm',
+            message: 'Do you need eslint(standard&prettier)',
+            name: 'eslint',
+            default: true,
+        },
+        {
+            type: 'confirm',
+            message: 'Do you need git hook to lint your commit message',
+            name: 'commitLint',
+            default: true,
+        },
+        {
+            type: 'confirm',
+            message: 'Do you need git hook to lint your code(eslint muse be checked)',
+            name: 'codeLint',
+            default: true,
+        },
+    ];
+};
+const genElectronQuestions = (name) => {
+    return [
+        {
+            type: 'input',
+            name: 'name',
+            message: 'Please enter the project name: ',
+            default: name,
+            validate(value) {
+                if (!value)
+                    return 'you must provide the name';
+                return true;
+            },
+        },
+        {
+            type: 'input',
+            name: 'description',
+            message: 'Please enter the project description: ',
+            validate(value) {
+                if (!value)
+                    return 'you must provide the description';
+                return true;
+            },
+        },
+        {
+            type: 'input',
+            name: 'author',
+            message: 'Please enter the author name: ',
+            default: 'fanzhongxu',
+            validate(value) {
+                if (!value)
+                    return 'you must provide the author';
+                return true;
+            },
+        },
+    ];
 };
 
 /*! *****************************************************************************
@@ -169,65 +258,16 @@ const updatePackage = (path, options) => {
     });
 };
 
-const genQuestions = (name) => {
-    return [
-        {
-            type: 'list',
-            name: 'frame',
-            message: 'please choose this project template',
-            choices: ['vue', 'react', 'electron'],
-        },
-        {
-            type: 'input',
-            name: 'name',
-            message: 'Please enter the project name: ',
-            default: name,
-            validate(value) {
-                if (!value)
-                    return 'you must provide the name';
-                return true;
-            },
-        },
-        {
-            type: 'input',
-            name: 'description',
-            message: 'Please enter the project description: ',
-            validate(value) {
-                if (!value)
-                    return 'you must provide the description';
-                return true;
-            },
-        },
-        {
-            type: 'input',
-            name: 'author',
-            message: 'Please enter the author name: ',
-            default: 'fanzhongxu',
-            validate(value) {
-                if (!value)
-                    return 'you must provide the author';
-                return true;
-            },
-        },
-        {
-            type: 'confirm',
-            message: 'Do you need eslint(standard&prettier)',
-            name: 'eslint',
-            default: true,
-        },
-        {
-            type: 'confirm',
-            message: 'Do you need git hook to lint your commit message',
-            name: 'commitLint',
-            default: true,
-        },
-        {
-            type: 'confirm',
-            message: 'Do you need git hook to lint your code(eslint muse be checked)',
-            name: 'codeLint',
-            default: true,
-        },
-    ];
+const gitSources = {
+    vue: {
+        url: 'direct:https://gitee.com/zxffan/templates.git#vue-spa',
+    },
+    react: {
+        url: '',
+    },
+    electron: {
+        url: 'direct:https://gitee.com/zxffan/templates.git#electron',
+    },
 };
 
 const download = (options) => {
@@ -252,6 +292,7 @@ const download = (options) => {
         });
     });
 };
+
 const updateProject = (options) => {
     return updatePackage(`${options.name}/package.json`, options)
         .then(() => createCliConfig(`${options.name}/sli.config.js`))
@@ -266,13 +307,47 @@ const successTip = (name) => [
     '\t npm install or yarn',
     '\t npm start',
 ].join('\n');
-var create = (name) => {
-    isFoldExist(name)
-        .then(() => inquirer.prompt(genQuestions(name)))
-        .then(answer => download(answer))
+const genVue = (name) => {
+    const frame = 'vue';
+    inquirer
+        .prompt(genVueQuestions(name))
+        .then(answer => download(Object.assign(answer, { frame })))
         .then(answer => updateProject(answer))
         .then(() => {
         console.log(symbol.success, successTip(name));
+    })
+        .catch(err => {
+        err.message && console.log(symbol.error, chalk.red(err.message));
+    });
+};
+
+const genElectron = (name) => {
+    const frame = 'electron';
+    inquirer
+        .prompt(genElectronQuestions(name))
+        .then(answer => download(Object.assign(answer, { frame })))
+        .then(options => updatePackage(`${name}/package.json`, options))
+        .catch(err => {
+        err.message && console.log(symbol.error, chalk.red(err.message));
+    });
+};
+
+var create = (name) => {
+    isFoldExist(name)
+        .then(() => inquirer.prompt(genFrameQuestions()))
+        .then(answer => {
+        switch (answer.frame) {
+            case 'vue':
+                genVue(name);
+                break;
+            case 'electron':
+                genElectron(name);
+                break;
+            case 'react':
+                // TODO
+                console.log(symbol.error, 'react is supported for now');
+                break;
+        }
     })
         .catch(err => {
         err.message && console.log(symbol.error, chalk.red(err.message));
