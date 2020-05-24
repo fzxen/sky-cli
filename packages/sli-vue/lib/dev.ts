@@ -13,7 +13,7 @@ export default (option: {
   const loading = ora();
   loading.start('app is starting...');
 
-  // set env
+  // set environment
   process.env.NODE_ENV = 'development';
 
   const config = getCliConfig('development', { port, cliConfig });

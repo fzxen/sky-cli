@@ -653,7 +653,7 @@ var dev = (option) => {
     const { cliConfig } = option;
     const loading = ora();
     loading.start('app is starting...');
-    // set env
+    // set environment
     process.env.NODE_ENV = 'development';
     const config = getCliConfig('development', { port, cliConfig });
     const compiler = Webpack__default(config);
@@ -674,23 +674,26 @@ var build = (option) => {
     const { analysis, cliConfig } = option;
     const loading = ora();
     loading.start('app is building...');
-    // set enviroment
+    // set environment
     process.env.NODE_ENV = 'production';
     const config = getCliConfig('production', { analysis, cliConfig });
     const compiler = Webpack__default(config);
-    compiler.hooks.done.tap('buildTip', () => {
-        loading.succeed('build successfully!');
-    });
-    compiler.hooks.failed.tap('buildTip', err => {
-        loading.fail('build failed');
-        console.log(err);
-    });
     compiler.run((err, stats) => {
-        const result = stats.toJson();
-        console.log([
-            chalk.green(`Time: ${result.time}ms`),
-            chalk.green(`webpack version: ${result.version}`),
-        ].join('\n'));
+        if (err) {
+            loading.fail(`build failed:${err}`);
+        }
+        else if (stats.hasErrors()) {
+            loading.fail(stats.compilation.errors.join('\n'));
+        }
+        else {
+            loading.succeed('build successfully!');
+            const result = stats.toJson();
+            console.log([
+                chalk.green(`Time: ${result.time}ms`),
+                chalk.green(`output: ${result.outputPath}`),
+                chalk.green(`webpack version: ${result.version}`),
+            ].join('\n'));
+        }
     });
 };
 
