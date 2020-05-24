@@ -14,7 +14,7 @@ enum depVersions {
   'standard' = '^14.3.3',
   '@commitlint/cli' = '^8.3.5',
   '@commitlint/config-conventional' = '^8.3.4',
-  '@redcoast/sli-vue' = '0.1.0',
+  '@redcoast/sli-vue' = '0.1.1',
 }
 
 export default depVersions;

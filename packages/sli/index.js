@@ -168,7 +168,7 @@ var depVersions;
     depVersions["standard"] = "^14.3.3";
     depVersions["@commitlint/cli"] = "^8.3.5";
     depVersions["@commitlint/config-conventional"] = "^8.3.4";
-    depVersions["@redcoast/sli-vue"] = "0.1.0";
+    depVersions["@redcoast/sli-vue"] = "0.1.1";
 })(depVersions || (depVersions = {}));
 var depVersions$1 = depVersions;
 
