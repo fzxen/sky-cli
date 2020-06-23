@@ -46,7 +46,7 @@
     "webpack": "^4.43.0",
     "webpack-bundle-analyzer": "^3.6.1",
     "webpack-chain": "^6.4.0",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
