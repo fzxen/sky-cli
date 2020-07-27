@@ -2,11 +2,11 @@ import symbol from 'log-symbols';
 import chalk from 'chalk';
 import inquirer from 'inquirer';
 
-import { updatePackage, createCliConfig } from './utils/update';
-import { genVueQuestions } from './utils/gen_create_questions';
+import { updatePackage, createCliConfig } from '../utils/update';
+import { genVueQuestions } from '../utils/gen_create_questions';
 
-import QueryOptions from './interface/create_query_options';
-import download from './utils/download';
+import QueryOptions from '../interface/create_query_options';
+import download from '../utils/download';
 
 const updateProject = (options: QueryOptions): Promise<void> => {
   return updatePackage(`${options.name}/package.json`, options)

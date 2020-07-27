@@ -1,7 +1,7 @@
-import download from './utils/download';
-import QueryOptions from './interface/create_query_options';
-import { genElectronQuestions } from './utils/gen_create_questions';
-import { updatePackage } from './utils/update';
+import download from '../utils/download';
+import QueryOptions from '../interface/create_query_options';
+import { genElectronQuestions } from '../utils/gen_create_questions';
+import { updatePackage } from '../utils/update';
 import inquirer from 'inquirer';
 import symbol from 'log-symbols';
 import chalk from 'chalk';

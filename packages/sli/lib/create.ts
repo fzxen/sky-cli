@@ -4,8 +4,8 @@ import inquirer from 'inquirer';
 
 import isFoldExist from './utils/is_fold_exist';
 import { genFrameQuestions } from './utils/gen_create_questions';
-import genVue from './gen_vue';
-import genElectron from './gen_electron';
+import genVue from './generator/gen_vue';
+import genElectron from './generator/gen_electron';
 
 export default (name: string): void => {
   isFoldExist(name)
